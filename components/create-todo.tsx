@@ -14,13 +14,18 @@ export default function CreateTodo() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+
+    // Convert checkbox value to boolean
+    const done = formData.get('done') === 'on';
+    formData.set('done', done.toString());
+
     action(formData);
   };
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="title" className="block text-sm font-medium ">
+        <label htmlFor="title" className="block text-sm font-medium">
           Title
         </label>
         <input
@@ -41,6 +46,17 @@ export default function CreateTodo() {
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
         ></textarea>
+      </div>
+      <div className="flex items-center">
+        <input
+          type="checkbox"
+          name="done"
+          id="done"
+          className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+        />
+        <label htmlFor="done" className="ml-2 block text-sm font-medium">
+          Done
+        </label>
       </div>
       <button
         type="submit"

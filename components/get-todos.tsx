@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { DeleteTodo } from './delete-todo';
 
 const GetTodos = async () => {
   const mytodo = await prisma.todo.findMany({
@@ -37,6 +38,7 @@ const GetTodos = async () => {
           <TableHead>Description</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Username</TableHead>
+          <TableHead>Delete</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -46,6 +48,9 @@ const GetTodos = async () => {
             <TableCell>{item.description}</TableCell>
             <TableCell>{item.done ? 'Done' : 'Pending'}</TableCell>
             <TableCell>{item.user.username}</TableCell>
+            <TableCell>
+              <DeleteTodo id={item.id} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
