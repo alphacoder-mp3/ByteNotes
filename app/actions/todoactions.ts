@@ -2,6 +2,7 @@
 'use server';
 
 import prisma from '@/lib/db';
+import { revalidatePath } from 'next/cache';
 // import { getServerSession } from 'next-auth/next';
 // import { authOptions } from '../api/auth/[...nextauth]';
 
@@ -18,7 +19,9 @@ export async function createTodo(formData: FormData): Promise<void> {
     data: {
       title,
       description,
-      User: { connect: { id: 'clyx64o9y0000wyma4kaekrmk' } },
+      user: { connect: { id: 'clyx64o9y0000wyma4kaekrmk' } },
     },
   });
+
+  revalidatePath('/');
 }

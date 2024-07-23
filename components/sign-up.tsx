@@ -1,4 +1,3 @@
-// app/components/signup.tsx
 'use client';
 
 import { useRef } from 'react';
