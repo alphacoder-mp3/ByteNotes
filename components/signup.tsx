@@ -27,10 +27,7 @@ export default function SignUp() {
       className="space-y-4 max-w-md mx-auto"
     >
       <div>
-        <label
-          htmlFor="username"
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="username" className="block text-sm font-medium ">
           Username
         </label>
         <input
@@ -42,10 +39,7 @@ export default function SignUp() {
         />
       </div>
       <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="password" className="block text-sm font-medium ">
           Password
         </label>
         <input
@@ -57,10 +51,7 @@ export default function SignUp() {
         />
       </div>
       <div>
-        <label
-          htmlFor="firstName"
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="firstName" className="block text-sm font-medium ">
           First Name
         </label>
         <input
@@ -72,10 +63,7 @@ export default function SignUp() {
         />
       </div>
       <div>
-        <label
-          htmlFor="lastName"
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="lastName" className="block text-sm font-medium ">
           Last Name
         </label>
         <input
