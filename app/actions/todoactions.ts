@@ -69,3 +69,50 @@ export async function deleteTodo(id: string): Promise<void> {
     throw new Error('Failed to delete todo');
   }
 }
+
+export async function updateTodo(
+  id: string,
+  formData: FormData
+): Promise<void> {
+  //   const session = await getServerSession(authOptions);
+  //   if (!session) {
+  //     throw new Error('You must be logged in to delete a todo');
+  //   }
+
+  try {
+    const todo = await prisma.todo.findUnique({
+      where: { id },
+      select: { userId: true },
+    });
+
+    if (!todo) {
+      throw new Error('Todo not found');
+    }
+
+    const title = formData.get('title') as string;
+    const description = formData.get('description') as string;
+    const done = formData.get('done') === 'true';
+
+    if (!title || !description) {
+      throw new Error('Title and description are required');
+    }
+
+    // if (todo.userId !== session.user.id) {
+    //   throw new Error('You are not authorized to delete this todo');
+    // }
+
+    await prisma.todo.update({
+      where: { id },
+      data: {
+        title,
+        description,
+        done,
+      },
+    });
+
+    revalidatePath('/');
+  } catch (error) {
+    console.error('Error updating todo:', error);
+    throw new Error('Failed to update todo');
+  }
+}

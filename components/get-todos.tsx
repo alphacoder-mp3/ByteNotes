@@ -9,6 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { DeleteTodo } from './delete-todo';
+import { UpdateTodo } from './update-todo';
 
 const GetTodos = async () => {
   const mytodo = await prisma.todo.findMany({
@@ -38,7 +39,7 @@ const GetTodos = async () => {
           <TableHead>Description</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Username</TableHead>
-          <TableHead>Delete</TableHead>
+          {/* <TableHead>Delete</TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -50,6 +51,9 @@ const GetTodos = async () => {
             <TableCell>{item.user.username}</TableCell>
             <TableCell>
               <DeleteTodo id={item.id} />
+            </TableCell>
+            <TableCell>
+              <UpdateTodo item={item} />
             </TableCell>
           </TableRow>
         ))}
