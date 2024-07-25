@@ -3,6 +3,8 @@
 import prisma from '@/lib/db';
 import { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { setSession } from '@/lib/session';
+import { clearSession } from '@/lib/session';
 
 export async function signUp(
   formData: FormData
@@ -50,29 +52,34 @@ export async function signIn(
 
   try {
     // Check if user exists
-    const existingUser = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { username },
     });
 
-    if (!existingUser) {
+    if (!user) {
       return { success: false, error: 'Invalid username or password' };
     }
 
     // Compare the provided password with the stored hashed password
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      existingUser.password
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       return { success: false, error: 'Invalid username or password' };
     }
 
+    //set session
+    setSession(user);
+
     // Password is valid, return success and user data
-    const { password: _, ...userWithoutPassword } = existingUser;
+    const { password: _, ...userWithoutPassword } = user;
     return { success: true, user: userWithoutPassword as User };
   } catch (error) {
     console.error('SignIn error:', error);
     return { success: false, error: 'An error occurred during signin' };
   }
+}
+
+export async function signOut() {
+  clearSession();
+  return { success: true };
 }

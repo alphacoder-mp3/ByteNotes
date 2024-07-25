@@ -3,11 +3,15 @@
 import { FormEvent, useRef } from 'react';
 import { createTodo } from '@/app/actions/todoactions';
 
-export default function CreateTodo() {
+export default function CreateTodo({
+  user,
+}: {
+  user: { id: string; username: string };
+}) {
   const formRef = useRef<HTMLFormElement>(null);
 
   async function action(formData: FormData) {
-    await createTodo(formData);
+    await createTodo(formData, user.id);
     formRef.current?.reset();
   }
 

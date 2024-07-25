@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 
 type updateTodoProps = {
   title: string;
@@ -27,12 +28,31 @@ type updateTodoProps = {
   };
 };
 
-export const UpdateTodo = ({ item }: { item: updateTodoProps }) => {
+export const UpdateTodo = ({
+  item,
+  userId,
+}: {
+  item: updateTodoProps;
+  userId: string;
+}) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
 
   async function action(formData: FormData) {
-    await updateTodo(item.id, formData);
+    const res = await updateTodo(item.id, formData, userId);
     formRef.current?.reset();
+    if (res.error) {
+      toast({
+        title: 'Uh oh! Something went wrong.',
+        description: res.error,
+        variant: 'destructive',
+      });
+    } else {
+      toast({
+        title: 'success',
+        description: res.message,
+      });
+    }
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

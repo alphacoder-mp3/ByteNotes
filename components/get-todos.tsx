@@ -11,11 +11,15 @@ import {
 import { DeleteTodo } from './delete-todo';
 import { UpdateTodo } from './update-todo';
 
-const GetTodos = async () => {
+const GetTodos = async ({
+  user,
+}: {
+  user: { id: string; username: string };
+}) => {
   const mytodo = await prisma.todo.findMany({
-    // where: {
-    //   userId: 'clyx64o9y0000wyma4kaekrmk',
-    // },
+    where: {
+      userId: user.id,
+    },
     select: {
       title: true,
       description: true,
@@ -50,10 +54,10 @@ const GetTodos = async () => {
             <TableCell>{item.done ? 'Done' : 'Pending'}</TableCell>
             <TableCell>{item.user.username}</TableCell>
             <TableCell>
-              <DeleteTodo id={item.id} />
+              <DeleteTodo id={item.id} userId={user.id} />
             </TableCell>
             <TableCell>
-              <UpdateTodo item={item} />
+              <UpdateTodo item={item} userId={user.id} />
             </TableCell>
           </TableRow>
         ))}
