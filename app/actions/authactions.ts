@@ -41,3 +41,38 @@ export async function signUp(
     return { success: false, error: 'An error occurred during signup' };
   }
 }
+
+export async function signIn(
+  formData: FormData
+): Promise<{ success: boolean; error?: string; user?: User }> {
+  const username = formData.get('username') as string;
+  const password = formData.get('password') as string;
+
+  try {
+    // Check if user exists
+    const existingUser = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (!existingUser) {
+      return { success: false, error: 'Invalid username or password' };
+    }
+
+    // Compare the provided password with the stored hashed password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+
+    if (!isPasswordValid) {
+      return { success: false, error: 'Invalid username or password' };
+    }
+
+    // Password is valid, return success and user data
+    const { password: _, ...userWithoutPassword } = existingUser;
+    return { success: true, user: userWithoutPassword as User };
+  } catch (error) {
+    console.error('SignIn error:', error);
+    return { success: false, error: 'An error occurred during signin' };
+  }
+}
