@@ -16,7 +16,12 @@ const GetTodos = async ({
 }: {
   user: { id: string; username: string };
 }) => {
-  const { todo } = await getTodo(user.id);
+  const { todo, error } = await getTodo(user.id);
+
+  if (error) {
+    <span> Error while fetching todos</span>;
+  }
+
   return (
     <Table>
       <TableCaption>A list of your todos.</TableCaption>
