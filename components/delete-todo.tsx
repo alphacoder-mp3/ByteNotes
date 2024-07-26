@@ -35,18 +35,11 @@ export const DeleteTodo = ({ id, userId }: { id: string; userId: string }) => {
               type="submit"
               onClick={async () => {
                 const res = await deleteTodo(id, userId);
-                if (res.error) {
-                  toast({
-                    title: 'Uh oh! Something went wrong.',
-                    description: res.error,
-                    variant: 'destructive',
-                  });
-                } else {
-                  toast({
-                    title: 'success',
-                    description: res.message,
-                  });
-                }
+                toast({
+                  title: res.error ? 'Uh oh! Something went wrong.' : 'success',
+                  description: res.message,
+                  variant: res.error ? 'destructive' : 'default',
+                });
               }}
             >
               Confirm

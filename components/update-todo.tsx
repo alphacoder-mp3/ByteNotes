@@ -23,8 +23,6 @@ type updateTodoProps = {
   id: string;
   user: {
     username: string;
-    firstName: string;
-    lastName: string;
   };
 };
 
@@ -41,18 +39,11 @@ export const UpdateTodo = ({
   async function action(formData: FormData) {
     const res = await updateTodo(item.id, formData, userId);
     formRef.current?.reset();
-    if (res.error) {
-      toast({
-        title: 'Uh oh! Something went wrong.',
-        description: res.error,
-        variant: 'destructive',
-      });
-    } else {
-      toast({
-        title: 'success',
-        description: res.message,
-      });
-    }
+    toast({
+      title: res.error ? 'Uh oh! Something went wrong.' : 'success',
+      description: res.message,
+      variant: res.error ? 'destructive' : 'default',
+    });
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

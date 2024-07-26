@@ -2,6 +2,7 @@
 
 import { FormEvent, useRef } from 'react';
 import { createTodo } from '@/app/actions/todoactions';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function CreateTodo({
   user,
@@ -9,10 +10,16 @@ export default function CreateTodo({
   user: { id: string; username: string };
 }) {
   const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
 
   async function action(formData: FormData) {
-    await createTodo(formData, user.id);
+    const res = await createTodo(formData, user.id);
     formRef.current?.reset();
+    toast({
+      title: res.error ? 'Uh oh! Something went wrong.' : 'success',
+      description: res.message,
+      variant: res.error ? 'destructive' : 'default',
+    });
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

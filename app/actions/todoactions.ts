@@ -15,7 +15,7 @@ import { revalidatePath } from 'next/cache';
 export async function createTodo(
   formData: FormData,
   userId: string
-): Promise<{ success: boolean; error?: string; message?: string }> {
+): Promise<{ success: boolean; error: boolean; message: string }> {
   //   const session = await getServerSession(authOptions);
   //   if (!session) {
   //     throw new Error('You must be logged in to create a todo');
@@ -26,7 +26,11 @@ export async function createTodo(
   const done = formData.get('done') === 'true';
 
   if (!title || !description) {
-    return { success: false, error: 'Title and description are required' };
+    return {
+      success: false,
+      error: true,
+      message: 'Title and description are required',
+    };
   }
 
   await prisma.todo.create({
@@ -39,13 +43,13 @@ export async function createTodo(
   });
 
   revalidatePath('/');
-  return { success: true, message: 'Created todo successfully' };
+  return { success: true, message: 'Created todo successfully', error: false };
 }
 
 export async function deleteTodo(
   id: string,
   userId: string
-): Promise<{ success: boolean; error?: string; message?: string }> {
+): Promise<{ success: boolean; error: boolean; message: string }> {
   //   const session = await getServerSession(authOptions);
   //   if (!session) {
   //     throw new Error('You must be logged in to delete a todo');
@@ -58,7 +62,7 @@ export async function deleteTodo(
     });
 
     if (!todo) {
-      return { success: false, error: 'Todo not found' };
+      return { success: false, error: true, message: 'Todo not found' };
     }
 
     // if (todo.userId !== session.user.id) {
@@ -68,7 +72,8 @@ export async function deleteTodo(
     if (todo.userId !== userId) {
       return {
         success: false,
-        error: 'You are not authorized to delete this todo',
+        error: true,
+        message: 'You are not authorized to delete this todo',
       };
     }
 
@@ -78,9 +83,13 @@ export async function deleteTodo(
 
     revalidatePath('/');
 
-    return { success: true, message: 'Deleted todo successfully' };
+    return {
+      success: true,
+      message: 'Deleted todo successfully',
+      error: false,
+    };
   } catch (error) {
-    return { success: false, error: error as string };
+    return { success: false, error: true, message: error as string };
   }
 }
 
@@ -88,7 +97,7 @@ export async function updateTodo(
   id: string,
   formData: FormData,
   userId: string
-): Promise<{ success: boolean; error?: string; message?: string }> {
+): Promise<{ success: boolean; error: boolean; message: string }> {
   //   const session = await getServerSession(authOptions);
   //   if (!session) {
   //     throw new Error('You must be logged in to delete a todo');
@@ -111,7 +120,8 @@ export async function updateTodo(
     if (!title || !description) {
       return {
         success: false,
-        error: 'Title and description are required',
+        error: true,
+        message: 'Title and description are required',
       };
     }
 
@@ -122,7 +132,8 @@ export async function updateTodo(
     if (todo.userId !== userId) {
       return {
         success: false,
-        error: 'You are not authorized to update this todo',
+        error: true,
+        message: 'You are not authorized to update this todo',
       };
     }
 
@@ -137,8 +148,55 @@ export async function updateTodo(
 
     revalidatePath('/');
 
-    return { success: true, message: 'Updated todo successfully' };
+    return {
+      success: true,
+      error: false,
+      message: 'Updated todo successfully',
+    };
   } catch (error) {
-    return { success: false, error: error as string };
+    return { success: false, error: true, message: error as string };
+  }
+}
+
+export async function getTodo(userId: string): Promise<{
+  success: boolean;
+  error: boolean;
+  message: string;
+  todo?:
+    | {
+        title: string;
+        description: string;
+        done: boolean;
+        id: string;
+        user: { username: string };
+      }[]
+    | [];
+}> {
+  try {
+    const todo = await prisma.todo.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        title: true,
+        description: true,
+        done: true,
+        id: true,
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+
+    return {
+      success: true,
+      error: false,
+      message: 'Fetched todo details successfully',
+      todo,
+    };
+  } catch (error) {
+    return { success: false, error: true, message: error as string };
   }
 }
