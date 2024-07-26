@@ -8,7 +8,7 @@ import { clearSession } from '@/lib/session';
 
 export async function signUp(
   formData: FormData
-): Promise<{ success: boolean; error?: string; user?: User }> {
+): Promise<{ success: boolean; error: boolean; user?: User; message: string }> {
   const username = formData.get('username') as string;
   const password = formData.get('password') as string;
   const firstName = formData.get('firstName') as string;
@@ -21,7 +21,11 @@ export async function signUp(
     });
 
     if (existingUser) {
-      return { success: false, error: 'Username already exists' };
+      return {
+        success: false,
+        error: true,
+        message: 'Username already exists',
+      };
     }
 
     // Hash the password
@@ -37,16 +41,27 @@ export async function signUp(
       },
     });
 
-    return { success: true, user: newUser };
+    return {
+      success: true,
+      user: newUser,
+      error: false,
+      message: 'Signed up successfully',
+    };
   } catch (error) {
-    console.error('Signup error:', error);
-    return { success: false, error: 'An error occurred during signup' };
+    return {
+      success: false,
+      message: 'An error occurred during signup' + error,
+      error: true,
+    };
   }
 }
 
-export async function signIn(
-  formData: FormData
-): Promise<{ success: boolean; error?: string; user?: User }> {
+export async function signIn(formData: FormData): Promise<{
+  success: boolean;
+  error: boolean;
+  user?: User;
+  message: string;
+}> {
   const username = formData.get('username') as string;
   const password = formData.get('password') as string;
 
@@ -57,14 +72,22 @@ export async function signIn(
     });
 
     if (!user) {
-      return { success: false, error: 'Invalid username or password' };
+      return {
+        success: false,
+        error: true,
+        message: 'Invalid username or password',
+      };
     }
 
     // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return { success: false, error: 'Invalid username or password' };
+      return {
+        success: false,
+        error: true,
+        message: 'Invalid username or password',
+      };
     }
 
     //set session
@@ -72,10 +95,18 @@ export async function signIn(
 
     // Password is valid, return success and user data
     const { password: _, ...userWithoutPassword } = user;
-    return { success: true, user: userWithoutPassword as User };
+    return {
+      success: true,
+      error: false,
+      user: userWithoutPassword as User,
+      message: 'Signed in successfully',
+    };
   } catch (error) {
-    console.error('SignIn error:', error);
-    return { success: false, error: 'An error occurred during signin' };
+    return {
+      success: false,
+      error: true,
+      message: 'An error occurred during signin' + error,
+    };
   }
 }
 
