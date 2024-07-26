@@ -81,5 +81,5 @@ export async function signIn(
 
 export async function signOut() {
   clearSession();
-  return { success: true };
+  return { success: true, message: 'Signed out successfully', error: false };
 }
