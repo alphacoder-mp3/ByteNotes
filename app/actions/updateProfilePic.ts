@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 
 export async function updateProfilePic(userId: string, filename: string) {
   try {
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: { profilePic: filename },
     });
@@ -13,6 +13,6 @@ export async function updateProfilePic(userId: string, filename: string) {
     return { success: true };
   } catch (error) {
     console.error('Failed to update profile picture:', error);
-    return { success: false, error: 'Failed to update profile picture' };
+    return { success: false, error: String(error) };
   }
 }
