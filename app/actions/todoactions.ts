@@ -158,45 +158,78 @@ export async function updateTodo(
   }
 }
 
-export async function getTodo(userId: string): Promise<{
+export async function getTodo(
+  userId: string,
+  page: number = 1,
+  limit: number = 10
+): Promise<{
   success: boolean;
   error: boolean;
   message: string;
-  todo?:
-    | {
-        title: string;
-        description: string;
-        done: boolean;
-        id: string;
-        user: { username: string };
-      }[]
-    | [];
+  todo: {
+    title: string;
+    description: string;
+    done: boolean;
+    id: string;
+    user: { username: string };
+  }[];
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
 }> {
   try {
-    const todo = await prisma.todo.findMany({
-      where: {
-        userId: userId,
-      },
-      select: {
-        title: true,
-        description: true,
-        done: true,
-        id: true,
-        user: {
-          select: {
-            username: true,
+    const skip = (page - 1) * limit;
+
+    const [todo, totalCount] = await Promise.all([
+      prisma.todo.findMany({
+        where: {
+          userId,
+        },
+        select: {
+          title: true,
+          description: true,
+          done: true,
+          id: true,
+          user: {
+            select: {
+              username: true,
+            },
           },
         },
-      },
-    });
+        skip,
+        take: limit,
+        orderBy: {
+          updatedAt: 'desc',
+        },
+      }),
+      prisma.todo.count({
+        where: {
+          userId,
+        },
+      }),
+    ]);
+
+    const totalPages = Math.ceil(totalCount / limit);
 
     return {
       success: true,
       error: false,
       message: 'Fetched todo details successfully',
-      todo,
+      todo: todo, // This will be an empty array if no todos are found
+      totalCount,
+      currentPage: page,
+      totalPages,
     };
   } catch (error) {
-    return { success: false, error: true, message: error as string };
+    return {
+      success: false,
+      error: true,
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+      todo: [],
+      totalCount: 0,
+      currentPage: page,
+      totalPages: 0,
+    };
   }
 }
