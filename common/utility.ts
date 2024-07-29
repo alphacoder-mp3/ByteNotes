@@ -33,8 +33,14 @@ const insertTextAtCursor = (textarea: HTMLTextAreaElement, text: string) => {
   const newValue =
     value.substring(0, selectionStart) + text + value.substring(selectionEnd);
   textarea.value = newValue;
+  autoResizeTextarea(textarea);
   textarea.setSelectionRange(
     selectionStart + text.length,
     selectionStart + text.length
   );
+};
+
+export const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
+  textarea.style.height = 'auto';
+  textarea.style.height = `${textarea.scrollHeight}px`;
 };
