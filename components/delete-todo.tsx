@@ -1,6 +1,6 @@
 'use client';
 import { LucideTrash2 } from 'lucide-react';
-import { deleteTodo } from '@/app/actions/todoactions';
+import { deleteTodo } from '@/app/actions/todo-actions';
 import {
   Dialog,
   DialogClose,

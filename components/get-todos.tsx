@@ -9,8 +9,9 @@ import {
 } from '@/components/ui/table';
 import { DeleteTodo } from './delete-todo';
 import { UpdateTodo } from './update-todo';
-import { getTodo } from '@/app/actions/todoactions';
+import { getTodo } from '@/app/actions/todo-actions';
 import { PaginateTodo } from '@/components/paginate-todo';
+import { parseFormattedText } from '@/common/formatted-text';
 
 const GetTodos = async ({
   user,
@@ -43,7 +44,7 @@ const GetTodos = async ({
             todo.map(item => (
               <TableRow key={item.id}>
                 <TableCell>{item.title}</TableCell>
-                <TableCell>{item.description}</TableCell>
+                <TableCell>{parseFormattedText(item.description)}</TableCell>
                 <TableCell>{item.done ? 'Done' : 'Pending'}</TableCell>
                 <TableCell>{item.user.username}</TableCell>
                 <TableCell>

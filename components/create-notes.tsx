@@ -1,10 +1,11 @@
 'use client';
 
 import { FormEvent, useRef, useState } from 'react';
-import { createTodo } from '@/app/actions/todoactions';
+import { createTodo } from '@/app/actions/todo-actions';
 import { useToast } from '@/components/ui/use-toast';
 import { ImageIcon, SquareCheckBig } from 'lucide-react';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { handleKeyDown } from '@/common/utility';
 
 export default function CreateNotes({
   user,
@@ -81,9 +82,11 @@ export default function CreateNotes({
                 name="description"
                 placeholder="Take a note..."
                 id="description"
-                rows={3}
+                rows={1}
                 required
+                autoFocus
                 className="w-full p-2 border-b border-slate-700 mb-2 outline-none resize-none"
+                onKeyDown={handleKeyDown}
               />
               <div className="flex items-center my-4">
                 <input

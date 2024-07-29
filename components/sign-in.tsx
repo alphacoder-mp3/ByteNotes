@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { signIn } from '@/app/actions/authactions';
+import { signIn } from '@/app/actions/auth-actions';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
