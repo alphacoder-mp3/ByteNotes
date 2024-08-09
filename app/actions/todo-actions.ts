@@ -14,7 +14,8 @@ import { revalidatePath } from 'next/cache';
 
 export async function createTodo(
   formData: FormData,
-  userId: string
+  userId: string,
+  bgColor: string
 ): Promise<{ success: boolean; error: boolean; message: string }> {
   //   const session = await getServerSession(authOptions);
   //   if (!session) {
@@ -38,6 +39,7 @@ export async function createTodo(
       title,
       description,
       done,
+      todoColor: bgColor,
       user: { connect: { id: userId } },
     },
   });
@@ -171,6 +173,7 @@ export async function getTodo(
     description: string;
     done: boolean;
     id: string;
+    todoColor: string;
     user: { username: string };
   }[];
   totalCount: number;
@@ -190,6 +193,7 @@ export async function getTodo(
           description: true,
           done: true,
           id: true,
+          todoColor: true,
           user: {
             select: {
               username: true,
