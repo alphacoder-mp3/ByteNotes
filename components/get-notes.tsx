@@ -1,5 +1,4 @@
-import { DeleteTodo } from './delete-todo';
-import { UpdateTodo } from './update-todo';
+'use server';
 import { getTodo } from '@/app/actions/todo-actions';
 // import { PaginateTodo } from '@/components/paginate-todo';
 import { parseFormattedText } from '@/common/formatted-text';
@@ -11,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ListingCard } from './card/listing-card';
 
 const GetNotes = async ({
   user,
@@ -20,27 +20,28 @@ const GetNotes = async ({
   page?: string;
 }) => {
   const { todo, error, currentPage, totalPages, totalCount, message } =
-    await getTodo(user.id, page ? Number(page) : 1, 20);
+    await getTodo(user.id, page ? Number(page) : 1, 25);
 
   if (error) {
     <span> Error while fetching todos {message}</span>;
   }
 
   return (
-    <section className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 p-4">
+    <section className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 p-4 mt-10">
       {todo &&
         todo.map(item => (
-          <Card
+          <ListingCard
             key={item.id}
-            className={`mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${item.todoColor}`}
+            item={item}
+            className={`relative mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${item.todoColor}`}
           >
             <CardHeader className="py-2 px-4">
               <CardTitle className="font-bold text-lg">{item.title}</CardTitle>
             </CardHeader>
-            <CardContent className="py-2 px-4">
+            <CardContent className="py-2 px-4 mb-8">
               {parseFormattedText(item.description)}
             </CardContent>
-            <CardFooter className="py-2 px-4 mb-8">
+            {/* <CardFooter className="py-2 px-4 mb-8">
               <div
                 className={`${
                   item.done ? 'bg-emerald-800' : 'bg-amber-800'
@@ -48,8 +49,8 @@ const GetNotes = async ({
               >
                 {item.done ? 'Done' : 'Pending'}
               </div>
-            </CardFooter>
-          </Card>
+            </CardFooter> */}
+          </ListingCard>
         ))}
     </section>
   );

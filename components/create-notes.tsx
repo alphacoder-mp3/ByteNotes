@@ -143,20 +143,20 @@ export default function CreateNotes({
             </>
           )}
           {isOpened && (
-            <div className="relative">
-              <div
-                className="absolute max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl"
-                ref={colorPaletteRef}
-              >
-                {bgColors.map(color => (
-                  <div
-                    className={`${color} h-3 w-3 lg:h-6 lg:w-6 rounded-full hover:border border-white cursor-pointer`}
-                    key={color}
-                    onClick={() => setBgColor(color)}
-                  ></div>
-                ))}
-              </div>
+            // <div className="">
+            <div
+              className="absolute max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl z-10"
+              ref={colorPaletteRef}
+            >
+              {bgColors.map(color => (
+                <div
+                  className={`${color} h-3 w-3 lg:h-6 lg:w-6 rounded-full hover:border border-white cursor-pointer`}
+                  key={color}
+                  onClick={() => setBgColor(color)}
+                />
+              ))}
             </div>
+            // </div>
           )}
         </div>
       </div>
