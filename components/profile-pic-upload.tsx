@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { updateProfilePic } from '@/app/actions/updateProfilePic';
+import { updateProfilePic } from '@/app/actions/update-profile-pic';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function ProfilePicUpload({ userId }: { userId: string }) {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,7 +34,9 @@ export default function ProfilePicUpload({ userId }: { userId: string }) {
         const result = await updateProfilePic(userId, data.filename);
         console.log('Update profile pic result:', result);
         if (result.success) {
-          alert('Profile picture updated successfully!');
+          toast({
+            title: 'Profile picture updated successfully!',
+          });
         } else {
           throw new Error(result.error || 'Failed to update profile picture');
         }
@@ -53,6 +57,7 @@ export default function ProfilePicUpload({ userId }: { userId: string }) {
         type="file"
         accept="image/*"
         onChange={e => setFile(e.target.files?.[0] || null)}
+        className="cursor-pointer rounded  border border-sky-600"
       />
       <button type="submit" disabled={!file}>
         Upload Profile Picture
