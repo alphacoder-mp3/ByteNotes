@@ -25,9 +25,9 @@ export default async function ProfilePage() {
             src={UserDetails.profilePic}
             alt="Profile Picture"
             className="w-full h-full object-cover"
-            layout="lazy"
             height={200}
             width={200}
+            priority={true}
           />
         </div>
       )}
