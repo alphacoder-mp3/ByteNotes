@@ -35,4 +35,13 @@ model Todo {
   user        User     @relation(fields: [userId], references: [id])
   userId      String
   todoColor   String   @default("")
+  images      Image[]
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  url       String
+  todo      Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
+  todoId    String
+  createdAt DateTime @default(now())
 }
