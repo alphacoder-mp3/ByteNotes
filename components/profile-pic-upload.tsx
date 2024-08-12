@@ -33,7 +33,6 @@ export default function ProfilePicUpload({ userId }: { userId: string }) {
 
       if (data.success) {
         console.log('File uploaded successfully:', data.filename);
-        setFile(null);
         const result = await updateProfilePic(userId, data.filename);
         console.log('Update profile pic result:', result);
         if (result.success) {
