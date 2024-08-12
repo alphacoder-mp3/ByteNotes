@@ -18,17 +18,22 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex flex-col items-center justify-center p-10">
-      <h1>Profile</h1>
+      <h1 className="m-4">Profile</h1>
       {UserDetails?.profilePic && (
-        <Image
-          src={`/uploads/${UserDetails.profilePic}`}
-          alt="Profile Picture"
-          width={200}
-          height={200}
-        />
+        <div className="rounded-full border-violet-600 border-8 overflow-hidden w-40 h-40 mb-4">
+          <Image
+            src={UserDetails.profilePic}
+            alt="Profile Picture"
+            className="w-full h-full object-cover"
+            layout="lazy"
+            height={200}
+            width={200}
+          />
+        </div>
       )}
+
       <ProfilePicUpload userId={user.id} />
-      <p>Username: {user.username}</p>
+      <p className="p-4">Username: {user.username}</p>
       <p>
         Name: {UserDetails?.firstName} {UserDetails?.lastName}
       </p>

@@ -3,11 +3,11 @@
 import prisma from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
-export async function updateProfilePic(userId: string, filename: string) {
+export async function updateProfilePic(userId: string, profilePicUrl: string) {
   try {
-    const updatedUser = await prisma.user.update({
+    await prisma.user.update({
       where: { id: userId },
-      data: { profilePic: filename },
+      data: { profilePic: profilePicUrl },
     });
     revalidatePath('/profile');
     return { success: true };

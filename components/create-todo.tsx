@@ -13,7 +13,7 @@ export default function CreateTodo({
   const { toast } = useToast();
 
   async function action(formData: FormData) {
-    const res = await createTodo(formData, user.id);
+    const res = await createTodo(formData, user.id, '');
     formRef.current?.reset();
     toast({
       title: res.error ? 'Uh oh! Something went wrong.' : 'success',

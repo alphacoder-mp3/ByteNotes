@@ -22,5 +22,4 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 Features to be added on priority:
 
-1. Cloudinary or any other media service for media upload and storing the data instead of storing it on our own server
-2. User to add images in the notes apart from profile
+1. User to add images in the notes apart from profile
