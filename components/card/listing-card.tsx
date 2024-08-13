@@ -18,6 +18,8 @@ import {
   CircleUser,
   Palette,
   Pin,
+  DeleteIcon,
+  Trash2,
 } from 'lucide-react';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
@@ -88,14 +90,19 @@ export const ListingCard = ({
       >
         <DialogHeader>
           {item.images?.map((item: any) => (
-            <Image
-              src={item.url}
-              key={item.id}
-              alt="Image"
-              width={400}
-              height={400}
-              className="h-full w-full rounded"
-            />
+            <div className="relative group">
+              <Image
+                src={item.url}
+                key={item.id}
+                alt="Image"
+                width={400}
+                height={400}
+                className="h-full w-full rounded "
+              />
+              <div className="opacity-0 absolute right-2 bottom-2 bg-slate-400 p-2 rounded overflow-hidden transition-opacity duration-700 ease-in-out group-hover:opacity-70 cursor-pointer">
+                <Trash2 size={16} />
+              </div>
+            </div>
           ))}
           <DialogTitle>
             <input
