@@ -45,6 +45,7 @@ const GetNotes = async ({
                   width={200}
                   height={200}
                   className="h-full w-full rounded"
+                  priority={true}
                 />
               ))}
               <CardTitle className="font-bold text-lg">{item.title}</CardTitle>
