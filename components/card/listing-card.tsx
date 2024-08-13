@@ -1,4 +1,14 @@
 'use client';
+import Image from 'next/image';
+import { useRef } from 'react';
+
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { useToast } from '@/components/ui/use-toast';
+import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
+import { ImageUploadButton } from '@/components/upload-image';
+import { deleteImage } from '@/app/actions/delete-todo-image';
+import { UpdateTodo } from '@/components/update-todo';
+import { DeleteTodo } from '@/components/delete-todo';
 import { Card } from '@/components/ui/card';
 import {
   Dialog,
@@ -11,22 +21,19 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useColorPalette } from '@/hooks/useColorPalette';
-import { useRef } from 'react';
 import {
   EllipsisVertical,
   CircleCheck,
   CircleUser,
   Palette,
   Pin,
-  DeleteIcon,
   Trash2,
 } from 'lucide-react';
-import { useOutsideClick } from '@/hooks/useOutsideClick';
-import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
-import { UpdateTodo } from '@/components/update-todo';
-import { DeleteTodo } from '@/components/delete-todo';
-import { ImageUploadButton } from '@/components/upload-image';
-import Image from 'next/image';
+
+type ImageProps = {
+  url: string;
+  id: string;
+};
 
 export const ListingCard = ({
   item,
@@ -38,10 +45,7 @@ export const ListingCard = ({
     todoColor: string;
     title: string;
     description: string;
-    images: {
-      url: string;
-      id: string;
-    }[];
+    images: ImageProps[];
   };
   children: React.ReactNode;
   className: string;
@@ -55,9 +59,21 @@ export const ListingCard = ({
     colorPaletteRef,
   } = useColorPalette();
   const cardRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
   useOutsideClick(cardRef, () => {
     setIsOpened(false);
   });
+  const handleDelete = async (imageId: string) => {
+    const result = await deleteImage(imageId);
+    if (result.success) {
+      toast({ title: 'Image deleted successfully' });
+    } else {
+      toast({
+        title: 'Something went wrong! Please try again',
+        variant: 'destructive',
+      });
+    }
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -89,7 +105,7 @@ export const ListingCard = ({
         }`}
       >
         <DialogHeader>
-          {item.images?.map((item: any) => (
+          {item.images?.map((item: ImageProps) => (
             <div className="relative group">
               <Image
                 src={item.url}
@@ -99,7 +115,10 @@ export const ListingCard = ({
                 height={400}
                 className="h-full w-full rounded "
               />
-              <div className="opacity-0 absolute right-2 bottom-2 bg-slate-400 p-2 rounded overflow-hidden transition-opacity duration-700 ease-in-out group-hover:opacity-70 cursor-pointer">
+              <div
+                className="opacity-0 absolute right-2 bottom-2 bg-slate-400 p-2 rounded overflow-hidden transition-opacity duration-700 ease-in-out group-hover:opacity-70 cursor-pointer"
+                onClick={() => handleDelete(item.id)}
+              >
                 <Trash2 size={16} />
               </div>
             </div>
