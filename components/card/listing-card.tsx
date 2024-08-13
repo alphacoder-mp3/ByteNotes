@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { useToast } from '@/components/ui/use-toast';
@@ -28,6 +28,9 @@ import {
   Palette,
   Pin,
   Trash2,
+  CircleX,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 
 type ImageProps = {
@@ -60,6 +63,11 @@ export const ListingCard = ({
   } = useColorPalette();
   const cardRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+  };
   useOutsideClick(cardRef, () => {
     setIsOpened(false);
   });
@@ -74,6 +82,7 @@ export const ListingCard = ({
       });
     }
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -106,14 +115,18 @@ export const ListingCard = ({
       >
         <DialogHeader>
           {item.images?.map((item: ImageProps) => (
-            <div className="relative group">
+            <div
+              className="relative group"
+              key={item.id}
+              onClick={() => setSelectedImage(item.url)}
+            >
               <Image
                 src={item.url}
                 key={item.id}
-                alt="Image"
+                alt="Notes Images"
                 width={400}
                 height={400}
-                className="h-full w-full rounded "
+                className="h-full w-full rounded"
               />
               <div
                 className="opacity-0 absolute right-2 bottom-2 bg-slate-400 p-2 rounded overflow-hidden transition-opacity duration-700 ease-in-out group-hover:opacity-70 cursor-pointer"
@@ -189,6 +202,28 @@ export const ListingCard = ({
               onClick={() => setBgColor(color)}
             />
           ))}
+        </div>
+      )}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[100]"
+          onClick={handleCloseModal}
+        >
+          <div className="relative max-w-full max-h-full">
+            <Image
+              src={selectedImage}
+              alt="Full Image"
+              layout="intrinsic"
+              width={1000}
+              height={1000}
+              className="rounded h-full w-full"
+            />
+            <CircleX
+              size={24}
+              className="absolute top-2 right-2 bg-opacity-50 cursor-pointer"
+              onClick={handleCloseModal}
+            />
+          </div>
         </div>
       )}
     </Dialog>
