@@ -24,13 +24,24 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
 import { UpdateTodo } from '@/components/update-todo';
 import { DeleteTodo } from '@/components/delete-todo';
+import TodoImageUpload from '../upload-image';
+import Image from 'next/image';
 
 export const ListingCard = ({
   item,
   children,
   className,
 }: {
-  item: { id: string; todoColor: string; title: string; description: string };
+  item: {
+    id: string;
+    todoColor: string;
+    title: string;
+    description: string;
+    images: {
+      url: string;
+      id: string;
+    }[];
+  };
   children: React.ReactNode;
   className: string;
 }) => {
@@ -77,6 +88,16 @@ export const ListingCard = ({
         }`}
       >
         <DialogHeader>
+          {item.images?.map((item: any) => (
+            <Image
+              src={item.url}
+              key={item.id}
+              alt="Image"
+              width={400}
+              height={400}
+              className="h-full w-full rounded"
+            />
+          ))}
           <DialogTitle>
             <input
               type="text"
@@ -84,7 +105,7 @@ export const ListingCard = ({
               id="title"
               placeholder="Title"
               required
-              value={item.title}
+              defaultValue={item.title}
               className={`w-full p-2 border-b border-slate-700 mb-2 outline-none ${
                 item.todoColor ? item.todoColor : bgColor ? bgColor : ''
               }`}
@@ -98,7 +119,7 @@ export const ListingCard = ({
             rows={1}
             required
             autoFocus
-            value={item.description}
+            defaultValue={item.description}
             className={`w-full p-2 border-b border-slate-700 mb-2 outline-none resize-none ${
               item.todoColor ? item.todoColor : bgColor ? bgColor : ''
             }`}
@@ -110,6 +131,7 @@ export const ListingCard = ({
               autoResizeTextarea(e.currentTarget as HTMLTextAreaElement)
             }
           />
+          <TodoImageUpload todoId={item.id} />
         </DialogHeader>
         <DialogFooter>
           <div className="flex items-center gap-6 absolute bottom-2 left-2 cursor-pointer">

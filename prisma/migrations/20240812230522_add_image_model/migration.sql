@@ -1,0 +1,8 @@
+-- DropForeignKey
+ALTER TABLE "Image" DROP CONSTRAINT "Image_todoId_fkey";
+
+-- AlterTable
+ALTER TABLE "Image" ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+-- AddForeignKey
+ALTER TABLE "Image" ADD CONSTRAINT "Image_todoId_fkey" FOREIGN KEY ("todoId") REFERENCES "Todo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

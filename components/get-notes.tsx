@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { ListingCard } from './card/listing-card';
+import Image from 'next/image';
 
 const GetNotes = async ({
   user,
@@ -36,6 +37,16 @@ const GetNotes = async ({
             className={`relative mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${item.todoColor}`}
           >
             <CardHeader className="py-2 px-4">
+              {item.images?.map((item: any) => (
+                <Image
+                  src={item.url}
+                  key={item.id}
+                  alt="Image"
+                  width={200}
+                  height={200}
+                  className="h-full w-full rounded"
+                />
+              ))}
               <CardTitle className="font-bold text-lg">{item.title}</CardTitle>
             </CardHeader>
             <CardContent className="py-2 px-4 mb-8">

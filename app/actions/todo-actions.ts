@@ -175,15 +175,33 @@ export async function getTodo(
     id: string;
     todoColor: string;
     user: { username: string };
+    images: {
+      id: string;
+      url: string;
+    }[];
   }[];
   totalCount: number;
   currentPage: number;
   totalPages: number;
 }> {
+  if (!userId) {
+    return {
+      success: false,
+      error: true,
+      message: 'User ID is required',
+      todo: [],
+      totalCount: 0,
+      currentPage: page,
+      totalPages: 0,
+    };
+  }
+
+  if (page < 1) page = 1;
+  if (limit < 1) limit = 10;
   try {
     const skip = (page - 1) * limit;
 
-    const [todo, totalCount] = await Promise.all([
+    const [todos, totalCount] = await Promise.all([
       prisma.todo.findMany({
         where: {
           userId,
@@ -197,6 +215,12 @@ export async function getTodo(
           user: {
             select: {
               username: true,
+            },
+          },
+          images: {
+            select: {
+              url: true,
+              id: true,
             },
           },
         },
@@ -219,7 +243,7 @@ export async function getTodo(
       success: true,
       error: false,
       message: 'Fetched todo details successfully',
-      todo: todo, // This will be an empty array if no todos are found
+      todo: todos || [], // This will be an empty array if no todos are found
       totalCount,
       currentPage: page,
       totalPages,
