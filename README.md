@@ -20,6 +20,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-Features to be added on priority:
+New features to be added:
 
-1. User to add images in the notes apart from profile
+1. Give user to add media at the notes creation time as well
+2. Add user profile details
