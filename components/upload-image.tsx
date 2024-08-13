@@ -1,55 +1,51 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { uploadImages } from '@/app/actions/upload-images'; // Adjust the path based on your directory structure
-import { useToast } from '@/components/ui/use-toast';
 import { ImageIcon } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+import { uploadImages } from '@/app/actions/upload-images';
 
-export default function TodoImageUpload({ todoId }: { todoId: string }) {
-  const [files, setFiles] = useState<File[]>([]);
+export function ImageUploadButton({ todoId }: { todoId: string }) {
   const { toast } = useToast();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFiles(Array.from(e.target.files || []));
-  };
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
 
-  const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (files.length === 0) return;
+      try {
+        const formData = new FormData();
+        selectedFiles.forEach(file => formData.append('files', file));
+        // formData.append('todoId', todoId);
 
-    const formData = new FormData();
-    files.forEach(file => formData.append('files', file));
+        const response = await uploadImages(formData, todoId);
 
-    try {
-      const result = await uploadImages(formData, todoId);
-
-      if (result.success) {
-        toast({ title: 'Images uploaded successfully!' });
-        // Optionally, update the UI with the new images
-      } else {
-        throw new Error(result.error || 'Upload failed');
+        if (response.success) {
+          toast({
+            title: 'Images uploaded successfully!',
+          });
+        } else {
+          throw new Error(response.error || 'Upload failed');
+        }
+      } catch (err) {
+        toast({
+          title: 'Error',
+          description:
+            err instanceof Error ? err.message : 'An unknown error occurred',
+          variant: 'destructive',
+        });
       }
-    } catch (err) {
-      toast({
-        title: 'Error',
-        description: err instanceof Error ? err.message : 'Unknown error',
-        variant: 'destructive',
-      });
     }
   };
 
   return (
-    <form onSubmit={handleUpload}>
+    <div className="relative" onClick={e => e.stopPropagation()}>
       <input
         type="file"
         multiple
         accept="image/*"
         onChange={handleFileChange}
-        className="cursor-pointer rounded"
+        className="absolute inset-0 opacity-0 cursor-pointer text-[0]"
       />
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-2">
-        <ImageIcon size={16} />
-      </button>
-    </form>
+      <ImageIcon size={16} className="cursor-pointer" />
+    </div>
   );
 }

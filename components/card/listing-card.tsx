@@ -13,7 +13,6 @@ import {
 import { useColorPalette } from '@/hooks/useColorPalette';
 import { useRef } from 'react';
 import {
-  ImageIcon,
   EllipsisVertical,
   CircleCheck,
   CircleUser,
@@ -24,7 +23,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
 import { UpdateTodo } from '@/components/update-todo';
 import { DeleteTodo } from '@/components/delete-todo';
-import TodoImageUpload from '../upload-image';
+import { ImageUploadButton } from '@/components/upload-image';
 import Image from 'next/image';
 
 export const ListingCard = ({
@@ -70,7 +69,7 @@ export const ListingCard = ({
                 setIsOpened(true);
               }}
             />
-            <ImageIcon size={16} />
+            <ImageUploadButton todoId={item.id} />
             <CircleUser size={16} />
             <EllipsisVertical size={16} />
           </div>
@@ -131,20 +130,20 @@ export const ListingCard = ({
               autoResizeTextarea(e.currentTarget as HTMLTextAreaElement)
             }
           />
-          <TodoImageUpload todoId={item.id} />
         </DialogHeader>
         <DialogFooter>
-          <div className="flex items-center gap-6 absolute bottom-2 left-2 cursor-pointer">
+          <div className="flex items-center gap-6 absolute bottom-4 left-4">
             <Palette
               size={16}
               onClick={e => {
                 e.preventDefault();
                 setIsOpened(true);
               }}
+              className="cursor-pointer"
             />
-            <ImageIcon size={16} />
-            <CircleUser size={16} />
-            <EllipsisVertical size={16} />
+            <ImageUploadButton todoId={item.id} />
+            <CircleUser size={16} className="cursor-pointer" />
+            <EllipsisVertical size={16} className="cursor-pointer" />
           </div>
           <div className="absolute top-2 right-2">
             <Pin size={24} />
