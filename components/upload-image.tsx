@@ -48,7 +48,7 @@ export default function TodoImageUpload({ todoId }: { todoId: string }) {
         className="cursor-pointer rounded"
       />
       <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-2">
-        Upload Images
+        <ImageIcon size={16} />
       </button>
     </form>
   );
