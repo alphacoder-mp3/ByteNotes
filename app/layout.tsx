@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
-import { ModeToggle } from '@/components/mode-toggle';
 import { Toaster } from '@/components/ui/toaster';
+import { SiteHeader } from '@/components/Header/site-header';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,9 +30,10 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="fixed top-2 right-2">
+          {/* <div className="fixed top-2 right-2">
             <ModeToggle />
-          </div>
+          </div> */}
+          <SiteHeader />
           {children}
           <Toaster />
         </ThemeProvider>

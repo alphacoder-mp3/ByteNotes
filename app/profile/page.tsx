@@ -17,7 +17,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-10">
+    <div className="flex flex-col items-center justify-center absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
       <h1 className="m-4">Profile</h1>
       {UserDetails?.profilePic && (
         <div className="rounded-full border-violet-600 border-8 overflow-hidden w-40 h-40 mb-4">
