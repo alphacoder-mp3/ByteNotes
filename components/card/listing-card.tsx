@@ -129,6 +129,7 @@ export const ListingCard = ({
       formData.append('title', item.title);
       formData.append('description', item.description);
       action(formData);
+      setBgColor('');
     }
   }, [bgColor]);
 
@@ -247,7 +248,7 @@ export const ListingCard = ({
       </DialogContent>
       {isOpened && (
         <div
-          className="absolute max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl z-10"
+          className="fixed inset-0 max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl z-10 justify-center"
           ref={colorPaletteRef}
         >
           {bgColors.map(color => (
