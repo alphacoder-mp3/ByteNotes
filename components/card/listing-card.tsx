@@ -7,7 +7,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
 import { ImageUploadButton } from '@/components/upload-image';
 import { deleteImage } from '@/app/actions/delete-todo-image';
-import { UpdateTodo } from '@/components/update-todo';
+import { updateTodo } from '@/app/actions/todo-actions';
 import { DeleteTodo } from '@/components/delete-todo';
 import { Card } from '@/components/ui/card';
 import {
@@ -42,6 +42,7 @@ export const ListingCard = ({
   item,
   children,
   className,
+  userId,
 }: {
   item: {
     id: string;
@@ -52,6 +53,7 @@ export const ListingCard = ({
   };
   children: React.ReactNode;
   className: string;
+  userId: string;
 }) => {
   const {
     isOpened,
@@ -62,6 +64,8 @@ export const ListingCard = ({
     colorPaletteRef,
   } = useColorPalette();
   const cardRef = useRef<HTMLDivElement>(null);
+  const dialogContentRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -82,6 +86,25 @@ export const ListingCard = ({
       });
     }
   };
+
+  useOutsideClick(dialogContentRef, () => {
+    const formData = new FormData(formRef.current!);
+    action(formData);
+  });
+  async function action(formData: FormData) {
+    const res = await updateTodo(
+      item.id,
+      formData,
+      userId,
+      bgColor ? bgColor : item.todoColor
+    );
+    formRef.current?.reset();
+    toast({
+      title: res.error ? 'Uh oh! Something went wrong.' : 'success',
+      description: res.message,
+      variant: res.error ? 'destructive' : 'default',
+    });
+  }
 
   return (
     <Dialog>
@@ -112,6 +135,7 @@ export const ListingCard = ({
         className={`mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${
           item.todoColor ? item.todoColor : bgColor ? bgColor : ''
         }`}
+        ref={dialogContentRef}
       >
         <DialogHeader>
           {item.images?.map((item: ImageProps) => (
@@ -136,39 +160,41 @@ export const ListingCard = ({
               </div>
             </div>
           ))}
-          <DialogTitle>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              placeholder="Title"
+          <form ref={formRef}>
+            <DialogTitle>
+              <input
+                type="text"
+                name="title"
+                id="title"
+                placeholder="Title"
+                required
+                defaultValue={item.title}
+                className={`w-full p-2 border-b border-slate-700 mb-2 outline-none ${
+                  item.todoColor ? item.todoColor : bgColor ? bgColor : ''
+                }`}
+              />
+            </DialogTitle>
+
+            <textarea
+              name="description"
+              placeholder="Take a note..."
+              id="description"
+              rows={1}
               required
-              defaultValue={item.title}
-              className={`w-full p-2 border-b border-slate-700 mb-2 outline-none ${
+              autoFocus
+              defaultValue={item.description}
+              className={`w-full p-2 border-b border-slate-700 mb-2 outline-none resize-none ${
                 item.todoColor ? item.todoColor : bgColor ? bgColor : ''
               }`}
+              onKeyDown={handleKeyDown}
+              onFocus={e =>
+                autoResizeTextarea(e.currentTarget as HTMLTextAreaElement)
+              }
+              onInput={e =>
+                autoResizeTextarea(e.currentTarget as HTMLTextAreaElement)
+              }
             />
-          </DialogTitle>
-
-          <textarea
-            name="description"
-            placeholder="Take a note..."
-            id="description"
-            rows={1}
-            required
-            autoFocus
-            defaultValue={item.description}
-            className={`w-full p-2 border-b border-slate-700 mb-2 outline-none resize-none ${
-              item.todoColor ? item.todoColor : bgColor ? bgColor : ''
-            }`}
-            onKeyDown={handleKeyDown}
-            onFocus={e =>
-              autoResizeTextarea(e.currentTarget as HTMLTextAreaElement)
-            }
-            onInput={e =>
-              autoResizeTextarea(e.currentTarget as HTMLTextAreaElement)
-            }
-          />
+          </form>
         </DialogHeader>
         <DialogFooter>
           <div className="flex items-center gap-6 absolute bottom-4 left-4">

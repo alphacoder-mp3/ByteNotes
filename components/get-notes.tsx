@@ -34,6 +34,7 @@ const GetNotes = async ({
           <ListingCard
             key={item.id}
             item={item}
+            userId={user.id}
             className={`relative mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${item.todoColor}`}
           >
             <CardHeader className="py-2 px-4">

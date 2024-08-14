@@ -15,7 +15,7 @@ import { revalidatePath } from 'next/cache';
 export async function createTodo(
   formData: FormData,
   userId: string,
-  bgColor: string
+  bgColor?: string
 ): Promise<{ success: boolean; error: boolean; message: string }> {
   //   const session = await getServerSession(authOptions);
   //   if (!session) {
@@ -98,7 +98,8 @@ export async function deleteTodo(
 export async function updateTodo(
   id: string,
   formData: FormData,
-  userId: string
+  userId: string,
+  bgColor?: string
 ): Promise<{ success: boolean; error: boolean; message: string }> {
   //   const session = await getServerSession(authOptions);
   //   if (!session) {
@@ -145,6 +146,7 @@ export async function updateTodo(
         title,
         description,
         done,
+        todoColor: bgColor,
       },
     });
 
