@@ -8,7 +8,6 @@ import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
 import { ImageUploadButton } from '@/components/upload-image';
 import { deleteImage } from '@/app/actions/delete-todo-image';
 import { updateTodo } from '@/app/actions/todo-actions';
-import { DeleteTodo } from '@/components/delete-todo';
 import { Card } from '@/components/ui/card';
 import {
   Dialog,
@@ -29,9 +28,8 @@ import {
   Pin,
   Trash2,
   CircleX,
-  ChevronLeft,
-  ChevronRight,
 } from 'lucide-react';
+import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 
 type ImageProps = {
   url: string;
@@ -63,7 +61,7 @@ export const ListingCard = ({
     setBgColor,
     colorPaletteRef,
   } = useColorPalette();
-  const cardRef = useRef<HTMLDivElement>(null);
+
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
@@ -72,7 +70,7 @@ export const ListingCard = ({
   const handleCloseModal = () => {
     setSelectedImage(null);
   };
-  useOutsideClick(cardRef, () => {
+  useOutsideClick(colorPaletteRef, () => {
     setIsOpened(false);
   });
   const handleDelete = async (imageId: string) => {
@@ -125,10 +123,19 @@ export const ListingCard = ({
     });
   }
 
+  useIsomorphicLayoutEffect(() => {
+    if (bgColor && item.todoColor !== bgColor) {
+      const formData = new FormData();
+      formData.append('title', item.title);
+      formData.append('description', item.description);
+      action(formData);
+    }
+  }, [bgColor]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Card key={item.id} className={className + ' group'} ref={cardRef}>
+        <Card key={item.id} className={className + ' group'}>
           {children}
           <div className="flex items-center gap-6 absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
             <Palette
@@ -179,6 +186,9 @@ export const ListingCard = ({
               </div>
             </div>
           ))}
+          <DialogDescription className="sr-only">
+            Make changes to your notes here.
+          </DialogDescription>
           <form ref={formRef}>
             <DialogTitle>
               <input
