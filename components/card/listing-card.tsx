@@ -228,14 +228,30 @@ export const ListingCard = ({
         </DialogHeader>
         <DialogFooter>
           <div className="flex items-center gap-6 absolute bottom-4 left-4">
-            <Palette
-              size={16}
-              onClick={e => {
-                e.preventDefault();
-                setIsOpened(true);
-              }}
-              className="cursor-pointer"
-            />
+            <Dialog>
+              <DialogTrigger asChild>
+                <Palette size={16} className="cursor-pointer" />
+              </DialogTrigger>
+
+              <DialogContent>
+                <DialogTitle className="sr-only">Color Palette</DialogTitle>
+                <DialogDescription className="sr-only">
+                  Color Palette inside the card
+                </DialogDescription>
+                <div
+                  className="fixed inset-0 max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl z-10 justify-center"
+                  ref={colorPaletteRef}
+                >
+                  {bgColors.map(color => (
+                    <div
+                      className={`${color} h-3 w-3 lg:h-6 lg:w-6 rounded-full hover:border border-white cursor-pointer`}
+                      key={color}
+                      onClick={() => setBgColor(color)}
+                    />
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
             <ImageUploadButton todoId={item.id} />
             <CircleUser size={16} className="cursor-pointer" />
             <EllipsisVertical size={16} className="cursor-pointer" />
