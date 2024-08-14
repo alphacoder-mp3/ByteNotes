@@ -289,7 +289,6 @@ export const ListingCard = ({
             <Image
               src={selectedImage}
               alt="Full Image"
-              layout="intrinsic"
               width={1000}
               height={1000}
               className="rounded h-full w-full"
