@@ -89,7 +89,26 @@ export const ListingCard = ({
 
   useOutsideClick(dialogContentRef, () => {
     const formData = new FormData(formRef.current!);
-    action(formData);
+
+    // Normalize the input values by trimming and removing extra spaces and newlines
+    const normalize = (value: string | null) =>
+      value ? value.trim().replace(/\s+/g, ' ') : '';
+
+    const currentTitle = normalize(formData.get('title')?.toString() || '');
+    const currentDescription = normalize(
+      formData.get('description')?.toString() || ''
+    );
+
+    const originalTitle = normalize(item.title);
+    const originalDescription = normalize(item.description);
+
+    if (
+      currentTitle !== originalTitle ||
+      currentDescription !== originalDescription ||
+      bgColor
+    ) {
+      action(formData);
+    }
   });
   async function action(formData: FormData) {
     const res = await updateTodo(
