@@ -73,7 +73,11 @@ export const ListingCard = ({
   useOutsideClick(colorPaletteRef, () => {
     setIsOpened(false);
   });
-  const handleDelete = async (imageId: string) => {
+  const handleDelete = async (
+    imageId: string,
+    e: React.SyntheticEvent<HTMLDivElement>
+  ) => {
+    e.stopPropagation();
     const result = await deleteImage(imageId);
     if (result.success) {
       toast({ title: 'Image deleted successfully' });
@@ -181,7 +185,7 @@ export const ListingCard = ({
               />
               <div
                 className="opacity-0 absolute right-2 bottom-2 bg-slate-400 p-2 rounded overflow-hidden transition-opacity duration-700 ease-in-out group-hover:opacity-70 cursor-pointer"
-                onClick={() => handleDelete(item.id)}
+                onClick={e => handleDelete(item.id, e)}
               >
                 <Trash2 size={16} />
               </div>
