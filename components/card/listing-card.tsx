@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { useToast } from '@/components/ui/use-toast';
@@ -65,29 +65,10 @@ export const ListingCard = ({
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const handleCloseModal = () => {
-    setSelectedImage(null);
-  };
   useOutsideClick(colorPaletteRef, () => {
     setIsOpened(false);
   });
-  const handleDelete = async (
-    imageId: string,
-    e: React.SyntheticEvent<HTMLDivElement>
-  ) => {
-    e.stopPropagation();
-    const result = await deleteImage(imageId);
-    if (result.success) {
-      toast({ title: 'Image deleted successfully' });
-    } else {
-      toast({
-        title: 'Something went wrong! Please try again',
-        variant: 'destructive',
-      });
-    }
-  };
 
   useOutsideClick(dialogContentRef, () => {
     const formData = new FormData(formRef.current!);
@@ -112,6 +93,23 @@ export const ListingCard = ({
       action(formData);
     }
   });
+
+  const handleDelete = async (
+    imageId: string,
+    e: React.SyntheticEvent<HTMLDivElement>
+  ) => {
+    e.stopPropagation();
+    const result = await deleteImage(imageId);
+    if (result.success) {
+      toast({ title: 'Image deleted successfully' });
+    } else {
+      toast({
+        title: 'Something went wrong! Please try again',
+        variant: 'destructive',
+      });
+    }
+  };
+
   async function action(formData: FormData) {
     const res = await updateTodo(
       item.id,
@@ -170,19 +168,45 @@ export const ListingCard = ({
       >
         <DialogHeader>
           {item.images?.map((item: ImageProps) => (
-            <div
-              className="relative group"
-              key={item.id}
-              onClick={() => setSelectedImage(item.url)}
-            >
-              <Image
-                src={item.url}
-                key={item.id}
-                alt="Notes Images"
-                width={400}
-                height={400}
-                className="h-full w-full rounded"
-              />
+            <div className="relative group" key={item.id}>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Image
+                    src={item.url}
+                    key={item.id}
+                    alt="Notes Images"
+                    width={400}
+                    height={400}
+                    className="h-full w-full rounded"
+                  />
+                </DialogTrigger>
+                <DialogContent className="w-screen">
+                  <div className="fixed bg-black bg-opacity-75 z-[100] w-screen sm:w-[500] md:w-[600] lg:w-[1000] top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
+                    <div className="relative">
+                      <Image
+                        src={item.url}
+                        alt="Notes Image Preview"
+                        width={2000}
+                        height={2000}
+                        className="rounded h-full w-full"
+                      />
+                      <DialogClose asChild>
+                        <CircleX
+                          size={24}
+                          className="absolute top-2 right-2 bg-opacity-50 cursor-pointer"
+                        />
+                      </DialogClose>
+                    </div>
+                  </div>
+                  <DialogTitle className="sr-only">
+                    {' '}
+                    Notes image preview
+                  </DialogTitle>
+                  <DialogDescription className="sr-only">
+                    Notes image preview with full display
+                  </DialogDescription>
+                </DialogContent>
+              </Dialog>
               <div
                 className="opacity-0 absolute right-2 bottom-2 bg-slate-400 p-2 rounded overflow-hidden transition-opacity duration-700 ease-in-out group-hover:opacity-70 cursor-pointer"
                 onClick={e => handleDelete(item.id, e)}
@@ -278,27 +302,6 @@ export const ListingCard = ({
               onClick={() => setBgColor(color)}
             />
           ))}
-        </div>
-      )}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[100]"
-          onClick={handleCloseModal}
-        >
-          <div className="relative max-w-full max-h-full">
-            <Image
-              src={selectedImage}
-              alt="Full Image"
-              width={1000}
-              height={1000}
-              className="rounded h-full w-full"
-            />
-            <CircleX
-              size={24}
-              className="absolute top-2 right-2 bg-opacity-50 cursor-pointer"
-              onClick={handleCloseModal}
-            />
-          </div>
         </div>
       )}
     </Dialog>
