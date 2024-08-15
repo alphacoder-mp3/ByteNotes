@@ -1,10 +1,14 @@
 'use server';
 
 import prisma from '@/lib/db';
+import { User } from '@prisma/client';
 
-export async function fetchUserDetails(
-  userId: string
-): Promise<{ success: boolean; error: boolean; message: string }> {
+export async function fetchUserDetails(userId: string): Promise<{
+  success: boolean;
+  error: boolean;
+  message: string;
+  data?: User | [];
+}> {
   if (!userId) {
     return {
       success: false,
@@ -13,7 +17,7 @@ export async function fetchUserDetails(
     };
   }
 
-  await prisma.user.findUnique({
+  const data = await prisma.user.findUnique({
     where: {
       id: userId,
     },
@@ -21,6 +25,7 @@ export async function fetchUserDetails(
 
   return {
     success: true,
+    data: data || [],
     message: 'User details fetched successfully',
     error: false,
   };

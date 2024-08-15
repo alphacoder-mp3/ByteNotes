@@ -7,18 +7,18 @@ import { Icons } from '@/components/icons';
 import { ModeToggle } from '@/components/mode-toggle';
 import { buttonVariants } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import prisma from '@/lib/db';
 import { User } from '@prisma/client';
 import { useServerSession } from '@/hooks/useServerSession';
+import { GetUserDetails } from '@/common/get-user-details';
 
 export async function SiteHeader() {
   const userId = await useServerSession();
   if (!userId) return;
-  const UserDetails: User | null = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+
+  const { data: UserDetails } = (await GetUserDetails(userId)) as {
+    data: User;
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
