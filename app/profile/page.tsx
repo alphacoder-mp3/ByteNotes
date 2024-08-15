@@ -2,10 +2,10 @@ import prisma from '@/lib/db';
 import { User } from '@prisma/client';
 import ProfilePicUpload from '@/components/profile-pic-upload';
 import Image from 'next/image';
-import { GetUserInfo } from '@/app/page';
+import { useServerSession } from '@/lib/useServerSession';
 
 export default async function ProfilePage() {
-  const userId = await GetUserInfo();
+  const userId = await useServerSession();
   if (!userId) return;
 
   const UserDetails: User | null = await prisma.user.findUnique({

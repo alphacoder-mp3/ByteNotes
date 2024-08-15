@@ -9,10 +9,10 @@ import { buttonVariants } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import prisma from '@/lib/db';
 import { User } from '@prisma/client';
-import { GetUserInfo } from '@/app/page';
+import { useServerSession } from '@/lib/useServerSession';
 
 export async function SiteHeader() {
-  const userId = await GetUserInfo();
+  const userId = await useServerSession();
   if (!userId) return;
   const UserDetails: User | null = await prisma.user.findUnique({
     where: {

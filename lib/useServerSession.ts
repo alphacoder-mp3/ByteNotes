@@ -3,5 +3,6 @@ import { cache } from 'react';
 
 export const useServerSession = cache(() => {
   let session = getSession();
-  return session;
+  if (!session) return null;
+  return session.userId;
 });

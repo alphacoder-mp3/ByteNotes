@@ -1,12 +1,12 @@
 import GetTodos from '@/components/get-todos';
-import { GetUserInfo } from '@/app/page';
+import { useServerSession } from '@/lib/useServerSession';
 
 export default async function TodoHomePage({
   params: { todoId },
 }: {
   params: { todoId: string };
 }) {
-  const userId = await GetUserInfo();
+  const userId = await useServerSession();
   if (!userId) return;
 
   return (

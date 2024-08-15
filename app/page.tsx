@@ -5,7 +5,7 @@ import { useServerSession } from '@/lib/useServerSession';
 import type { Metadata } from 'next';
 
 export default async function Home() {
-  const userId = await GetUserInfo();
+  const userId = await useServerSession();
   if (!userId) return;
   return (
     <div className="container mx-auto p-4 m-12 max-h-screen w-full">
@@ -20,12 +20,6 @@ export default async function Home() {
       <GetNotes userId={userId} />
     </div>
   );
-}
-
-export async function GetUserInfo() {
-  const session = useServerSession();
-  if (!session) return null;
-  return session.userId;
 }
 
 export async function generateMetadata(): Promise<Metadata> {
