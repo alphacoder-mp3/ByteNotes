@@ -5,8 +5,8 @@ import { useServerSession } from '@/lib/useServerSession';
 import type { Metadata } from 'next';
 
 export default async function Home() {
-  const user = await GetUserInfo();
-
+  const userId = await GetUserInfo();
+  if (!userId) return;
   return (
     <div className="container mx-auto p-4 m-12 max-h-screen w-full">
       <div className={'flex items-center justify-center mb-6'}>
@@ -14,24 +14,23 @@ export default async function Home() {
           ByteNotes.
         </div>
       </div>
-      {/* <h1 className="text-2xl font-bold mb-4 mt-8">Create a New Todo</h1> */}
+      {/* <h1 className="text-2xl font-bold mb-4 mt-8">Create a New Note</h1> */}
       {/* <CreateTodo user={user} /> */}
-      <CreateNotes user={user} />
-      <GetNotes user={user} />
+      <CreateNotes userId={userId} />
+      <GetNotes userId={userId} />
     </div>
   );
 }
 
 export async function GetUserInfo() {
-  const { user } = await useServerSession();
-  return user;
+  const session = useServerSession();
+  if (!session) return null;
+  return session.userId;
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const user = await GetUserInfo();
-
   return {
-    title: `${user.username} - ByteNotes`,
+    title: ` ByteNotes`,
     description: 'Customized your notes and collaborate ',
   };
 }

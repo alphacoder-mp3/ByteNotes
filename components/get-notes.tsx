@@ -2,26 +2,19 @@
 import { getTodo } from '@/app/actions/todo-actions';
 // import { PaginateTodo } from '@/components/paginate-todo';
 import { parseFormattedText } from '@/common/formatted-text';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ListingCard } from './card/listing-card';
 import Image from 'next/image';
 
 const GetNotes = async ({
-  user,
+  userId,
   page,
 }: {
-  user: { id: string; username: string };
+  userId: string;
   page?: string;
 }) => {
   const { todo, error, currentPage, totalPages, totalCount, message } =
-    await getTodo(user.id, page ? Number(page) : 1, 25);
+    await getTodo(userId, page ? Number(page) : 1, 25);
 
   if (error) {
     <span> Error while fetching todos {message}</span>;
@@ -34,7 +27,7 @@ const GetNotes = async ({
           <ListingCard
             key={item.id}
             item={item}
-            userId={user.id}
+            userId={userId}
             className={`relative mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${item.todoColor}`}
           >
             <CardHeader className="py-2 px-4">
@@ -70,8 +63,3 @@ const GetNotes = async ({
 };
 
 export default GetNotes;
-{
-  /* <DeleteTodo id={item.id} userId={user.id} />
-
- <UpdateTodo item={item} userId={user.id} /> */
-}

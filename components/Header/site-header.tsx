@@ -7,15 +7,16 @@ import { Icons } from '@/components/icons';
 import { ModeToggle } from '@/components/mode-toggle';
 import { buttonVariants } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import { GetUserInfo } from '@/app/page';
 import prisma from '@/lib/db';
 import { User } from '@prisma/client';
+import { GetUserInfo } from '@/app/page';
 
 export async function SiteHeader() {
-  const user = await GetUserInfo();
+  const userId = await GetUserInfo();
+  if (!userId) return;
   const UserDetails: User | null = await prisma.user.findUnique({
     where: {
-      id: user.id,
+      id: userId,
     },
   });
   return (

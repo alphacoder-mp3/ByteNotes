@@ -30,9 +30,6 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <div className="fixed top-2 right-2">
-            <ModeToggle />
-          </div> */}
           <SiteHeader />
           {children}
           <Toaster />

@@ -1,12 +1,7 @@
-import { getServerSession } from './session';
-import { redirect } from 'next/navigation';
+import { getSession } from '@/lib/session';
+import { cache } from 'react';
 
-export async function useServerSession(redirectTo: string = '/signin') {
-  const session = await getServerSession();
-
-  if (!session) {
-    redirect(redirectTo);
-  }
-
+export const useServerSession = cache(() => {
+  let session = getSession();
   return session;
-}
+});

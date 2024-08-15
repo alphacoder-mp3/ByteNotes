@@ -2,19 +2,17 @@ import prisma from '@/lib/db';
 import { User } from '@prisma/client';
 import ProfilePicUpload from '@/components/profile-pic-upload';
 import Image from 'next/image';
-import { useServerSession } from '@/lib/useServerSession';
+import { GetUserInfo } from '@/app/page';
 
 export default async function ProfilePage() {
-  const { user } = await useServerSession();
+  const userId = await GetUserInfo();
+  if (!userId) return;
+
   const UserDetails: User | null = await prisma.user.findUnique({
     where: {
-      id: user.id,
+      id: userId,
     },
   });
-
-  if (!user) {
-    return <div>User not found</div>;
-  }
 
   return (
     <div className="flex flex-col items-center justify-center absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
@@ -32,8 +30,8 @@ export default async function ProfilePage() {
         </div>
       )}
 
-      <ProfilePicUpload userId={user.id} />
-      <p className="p-4">Username: {user.username}</p>
+      <ProfilePicUpload userId={userId} />
+      <p className="p-4">Username: {UserDetails?.username}</p>
       <p>
         Name: {UserDetails?.firstName} {UserDetails?.lastName}
       </p>

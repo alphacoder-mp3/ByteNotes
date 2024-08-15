@@ -8,11 +8,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
 import { useColorPalette } from '@/hooks/useColorPalette';
 
-export default function CreateNotes({
-  user,
-}: {
-  user: { id: string; username: string };
-}) {
+export default function CreateNotes({ userId }: { userId: string }) {
   const formRef = useRef<HTMLFormElement>(null);
   const expandRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -27,7 +23,7 @@ export default function CreateNotes({
   } = useColorPalette();
 
   async function action(formData: FormData) {
-    const res = await createTodo(formData, user.id, bgColor);
+    const res = await createTodo(formData, userId, bgColor);
     formRef.current?.reset();
     toast({
       title: res.error ? 'Uh oh! Something went wrong.' : 'success',
