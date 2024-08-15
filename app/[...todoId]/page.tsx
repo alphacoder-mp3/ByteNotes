@@ -1,16 +1,17 @@
 import GetTodos from '@/components/get-todos';
-import { useServerSession } from '@/lib/useServerSession';
+import { GetUserInfo } from '@/app/page';
 
 export default async function TodoHomePage({
   params: { todoId },
 }: {
   params: { todoId: string };
 }) {
-  const { user } = await useServerSession();
+  const userId = await GetUserInfo();
+  if (!userId) return;
 
   return (
     <div className="container mx-auto p-4 m-12 max-h-screen w-full">
-      <GetTodos user={user} page={todoId} />
+      <GetTodos userId={userId} page={todoId} />
     </div>
   );
 }
