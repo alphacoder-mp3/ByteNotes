@@ -292,7 +292,7 @@ export const ListingCard = ({
       </DialogContent>
       {isOpened && (
         <div
-          className="fixed inset-0 max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl z-10 justify-center"
+          className="fixed inset-0 max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl z-50 justify-center"
           ref={colorPaletteRef}
         >
           {bgColors.map(color => (
