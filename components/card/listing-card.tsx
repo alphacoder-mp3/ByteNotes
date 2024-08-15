@@ -261,18 +261,18 @@ export const ListingCard = ({
                 <Palette size={16} className="cursor-pointer" />
               </DialogTrigger>
 
-              <DialogContent>
+              <DialogContent className="w-screen">
                 <DialogTitle className="sr-only">Color Palette</DialogTitle>
                 <DialogDescription className="sr-only">
                   Color Palette inside the card
                 </DialogDescription>
                 <div
-                  className="fixed inset-0 max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl z-10 justify-center"
+                  className="fixed inset-0 h-24 md:w-[600] lg:w-[1000] lg:h-12 px-2 py-4 lg:py-0 bg-zinc-900 flex items-center justify-center gap-2 rounded-xl z-10 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] flex-wrap"
                   ref={colorPaletteRef}
                 >
                   {bgColors.map(color => (
                     <div
-                      className={`${color} h-3 w-3 lg:h-6 lg:w-6 rounded-full hover:border border-white cursor-pointer`}
+                      className={`${color} h-6 w-6 rounded-full hover:border border-white cursor-pointer`}
                       key={color}
                       onClick={() => setBgColor(color)}
                     />
@@ -292,12 +292,12 @@ export const ListingCard = ({
       </DialogContent>
       {isOpened && (
         <div
-          className="fixed inset-0 max-w-full h-12 px-2 bg-zinc-900 flex items-center justify-center gap-2 rounded-xl z-50"
+          className="fixed inset-0 max-w-full h-12 px-2 py-4 md:py-0 bg-zinc-900 flex items-center justify-center flex-wrap gap-2 rounded-xl z-50"
           ref={colorPaletteRef}
         >
           {bgColors.map(color => (
             <div
-              className={`${color} h-3 w-3 lg:h-6 lg:w-6 rounded-full hover:border border-white cursor-pointer`}
+              className={`${color} h-6 w-6 rounded-full hover:border border-white cursor-pointer`}
               key={color}
               onClick={() => setBgColor(color)}
             />

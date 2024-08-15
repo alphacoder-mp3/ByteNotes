@@ -134,12 +134,12 @@ export default function CreateNotes({ userId }: { userId: string }) {
           )}
           {isOpened && (
             <div
-              className="absolute inset-0 max-w-full h-12 px-2 bg-zinc-900 flex items-center justify-center gap-2 rounded-xl z-50"
+              className="absolute inset-0 max-w-full h-12 px-2 py-4 md:py-0 bg-zinc-900 flex items-center justify-center flex-wrap gap-2 rounded-xl z-50"
               ref={colorPaletteRef}
             >
               {bgColors.map(color => (
                 <div
-                  className={`${color} h-3 w-3 lg:h-6 lg:w-6 rounded-full hover:border border-white cursor-pointer`}
+                  className={`${color} h-6 w-6 rounded-full hover:border border-white cursor-pointer`}
                   key={color}
                   onClick={() => setBgColor(color)}
                 />

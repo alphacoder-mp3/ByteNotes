@@ -2,9 +2,14 @@ import { useState, useRef } from 'react';
 
 export type Color =
   | ''
+  | 'bg-white'
   | 'bg-zinc-700'
   | 'bg-slate-700'
   | 'bg-neutral-700'
+  | 'bg-gray-700'
+  | 'bg-stone-700'
+  | 'bg-yellow-700'
+  | 'bg-orange-700'
   | 'bg-violet-700'
   | 'bg-blue-700'
   | 'bg-sky-700'
@@ -17,13 +22,19 @@ export type Color =
   | 'bg-teal-700'
   | 'bg-emerald-700'
   | 'bg-lime-700'
+  | 'bg-green-700'
   | 'bg-amber-700';
 
 export function useColorPalette() {
   const bgColors: Color[] = [
+    'bg-white',
     'bg-zinc-700',
     'bg-slate-700',
     'bg-neutral-700',
+    'bg-gray-700',
+    'bg-stone-700',
+    'bg-yellow-700',
+    'bg-orange-700',
     'bg-violet-700',
     'bg-blue-700',
     'bg-sky-700',
@@ -36,6 +47,7 @@ export function useColorPalette() {
     'bg-teal-700',
     'bg-emerald-700',
     'bg-lime-700',
+    'bg-green-700',
     'bg-amber-700',
   ];
   const [isOpened, setIsOpened] = useState<boolean>(false);
