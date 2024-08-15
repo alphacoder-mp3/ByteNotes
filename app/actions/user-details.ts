@@ -1,6 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/db';
 
 export async function fetchUserDetails(
@@ -20,7 +19,6 @@ export async function fetchUserDetails(
     },
   });
 
-  revalidatePath('/');
   return {
     success: true,
     message: 'User details fetched successfully',
