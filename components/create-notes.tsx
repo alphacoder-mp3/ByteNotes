@@ -129,19 +129,12 @@ export default function CreateNotes({ userId }: { userId: string }) {
                     onClick={() => setIsOpened(true)}
                   />
                 </div>
-                {/* <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-neutral-200 rounded-lg"
-                >
-                  Save
-                </button> */}
               </div>
             </>
           )}
           {isOpened && (
-            // <div className="">
             <div
-              className="absolute max-w-full h-12 px-2 bg-zinc-900 flex items-center gap-2 rounded-xl z-10"
+              className="absolute inset-0 max-w-full h-12 px-2 bg-zinc-900 flex items-center justify-center gap-2 rounded-xl z-50"
               ref={colorPaletteRef}
             >
               {bgColors.map(color => (
@@ -152,7 +145,6 @@ export default function CreateNotes({ userId }: { userId: string }) {
                 />
               ))}
             </div>
-            // </div>
           )}
         </div>
       </div>
