@@ -1,7 +1,7 @@
 import CreateNotes from '@/components/create-notes';
 // import CreateTodo from '@/components/create-todo';
 import GetNotes from '@/components/get-notes';
-import { useServerSession } from '@/lib/useServerSession';
+import { useServerSession } from '@/hooks/useServerSession';
 import type { Metadata } from 'next';
 
 export default async function Home() {
@@ -24,7 +24,7 @@ export default async function Home() {
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: ` ByteNotes`,
+    title: `ByteNotes`,
     description: 'Customized your notes and collaborate ',
   };
 }

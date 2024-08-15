@@ -2,7 +2,7 @@ import prisma from '@/lib/db';
 import { User } from '@prisma/client';
 import ProfilePicUpload from '@/components/profile-pic-upload';
 import Image from 'next/image';
-import { useServerSession } from '@/lib/useServerSession';
+import { useServerSession } from '@/hooks/useServerSession';
 
 export default async function ProfilePage() {
   const userId = await useServerSession();

@@ -1,5 +1,5 @@
 import GetTodos from '@/components/get-todos';
-import { useServerSession } from '@/lib/useServerSession';
+import { useServerSession } from '@/hooks/useServerSession';
 
 export default async function TodoHomePage({
   params: { todoId },

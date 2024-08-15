@@ -9,7 +9,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import prisma from '@/lib/db';
 import { User } from '@prisma/client';
-import { useServerSession } from '@/lib/useServerSession';
+import { useServerSession } from '@/hooks/useServerSession';
 
 export async function SiteHeader() {
   const userId = await useServerSession();
