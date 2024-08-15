@@ -25,6 +25,6 @@ export default async function Home() {
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `ByteNotes`,
-    description: 'Customized your notes and collaborate ',
+    description: 'Customize your notes and collaborate ',
   };
 }

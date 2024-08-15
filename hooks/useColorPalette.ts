@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 
 export type Color =
   | ''
+  | 'bg-zinc-700'
   | 'bg-slate-700'
   | 'bg-neutral-700'
   | 'bg-violet-700'
@@ -20,7 +21,7 @@ export type Color =
 
 export function useColorPalette() {
   const bgColors: Color[] = [
-    '',
+    'bg-zinc-700',
     'bg-slate-700',
     'bg-neutral-700',
     'bg-violet-700',
