@@ -6,6 +6,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { useToast } from '@/components/ui/use-toast';
 import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
 import { ImageUploadButton } from '@/components/upload-image';
+import { ColorPalette } from '@/components/color-palette';
 import { deleteImage } from '@/app/actions/delete-todo-image';
 import { updateTodo } from '@/app/actions/todo-actions';
 import { Card } from '@/components/ui/card';
@@ -292,18 +293,11 @@ export const ListingCard = ({
         </DialogFooter>
       </DialogContent>
       {isOpened && (
-        <div
-          className="fixed inset-0 max-w-full h-12 px-2 py-4 md:py-0 bg-zinc-900 flex items-center justify-center flex-wrap gap-2 rounded-xl z-50"
-          ref={colorPaletteRef}
-        >
-          {bgColors.map(color => (
-            <div
-              className={`${color} h-6 w-6 rounded-full hover:border border-white cursor-pointer`}
-              key={color}
-              onClick={() => setBgColor(color)}
-            />
-          ))}
-        </div>
+        <ColorPalette
+          colorPaletteRef={colorPaletteRef}
+          bgColors={bgColors}
+          setBgColor={setBgColor}
+        />
       )}
     </Dialog>
   );
