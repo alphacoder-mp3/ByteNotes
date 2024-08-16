@@ -30,6 +30,7 @@ import {
   CircleX,
 } from 'lucide-react';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
+import { getLightModeColor, getDarkModeColor } from '@/common/common';
 
 type ImageProps = {
   url: string;
@@ -161,9 +162,9 @@ export const ListingCard = ({
         </Card>
       </DialogTrigger>
       <DialogContent
-        className={`mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${
-          item.todoColor ? item.todoColor : bgColor ? bgColor : ''
-        }`}
+        className={`mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${getLightModeColor(
+          item.todoColor
+        )} ${getDarkModeColor(item.todoColor)}`}
         ref={dialogContentRef}
       >
         <DialogHeader>
@@ -227,9 +228,9 @@ export const ListingCard = ({
                 placeholder="Title"
                 required
                 defaultValue={item.title}
-                className={`w-full p-2 border-b border-slate-700 mb-2 outline-none ${
-                  item.todoColor ? item.todoColor : bgColor ? bgColor : ''
-                }`}
+                className={`w-full p-2 border-b border-slate-700 mb-2 outline-none ${getLightModeColor(
+                  item.todoColor
+                )} ${getDarkModeColor(item.todoColor)}`}
               />
             </DialogTitle>
 
@@ -241,9 +242,9 @@ export const ListingCard = ({
               required
               autoFocus
               defaultValue={item.description}
-              className={`w-full p-2 border-b border-slate-700 mb-2 outline-none resize-none ${
-                item.todoColor ? item.todoColor : bgColor ? bgColor : ''
-              }`}
+              className={`w-full p-2 border-b border-slate-700 mb-2 outline-none resize-none ${getLightModeColor(
+                item.todoColor
+              )} ${getDarkModeColor(item.todoColor)}`}
               onKeyDown={handleKeyDown}
               onFocus={e =>
                 autoResizeTextarea(e.currentTarget as HTMLTextAreaElement)
