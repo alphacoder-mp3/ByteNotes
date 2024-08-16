@@ -28,7 +28,7 @@ const GetNotes = async ({
             key={item.id}
             item={item}
             userId={userId}
-            className={`relative mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${item.todoColor}`}
+            className={`relative mb-4 border dark:border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${item.todoColor}`}
           >
             <CardHeader className="py-2 px-4">
               {item.images?.map((item: any) => (
