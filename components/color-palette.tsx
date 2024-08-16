@@ -1,5 +1,5 @@
-import { Color } from '@/hooks/useColorPalette';
 import { Dispatch, RefObject, SetStateAction } from 'react';
+import { Color } from '@/hooks/useColorPalette';
 import { getLightModeColor, getDarkModeColor } from '@/common/common';
 
 export const ColorPalette = ({
@@ -13,7 +13,7 @@ export const ColorPalette = ({
 }) => {
   return (
     <div
-      className="fixed inset-0 max-w-full h-12 px-2 py-4 md:py-0 bg-zinc-900 flex items-center justify-center flex-wrap gap-2 dark:rounded-xl z-50"
+      className="fixed inset-0 max-w-full min-h-fit px-2 py-4 md:py-0 bg-zinc-900 flex items-center justify-center flex-wrap gap-2 dark:rounded-xl z-50"
       ref={colorPaletteRef}
     >
       {bgColors.map(color => (
