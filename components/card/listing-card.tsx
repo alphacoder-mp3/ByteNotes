@@ -229,7 +229,7 @@ export const ListingCard = ({
                 placeholder="Title"
                 required
                 defaultValue={item.title}
-                className={`w-full p-2 border-b border-slate-700 mb-2 outline-none ${getLightModeColor(
+                className={`w-full p-2 shadow-sm rounded-md dark:border-b border-slate-700 mb-2 outline-none ${getLightModeColor(
                   item.todoColor
                 )} ${getDarkModeColor(item.todoColor)}`}
               />
@@ -243,7 +243,7 @@ export const ListingCard = ({
               required
               autoFocus
               defaultValue={item.description}
-              className={`w-full p-2 border-b border-slate-700 mb-2 outline-none resize-none ${getLightModeColor(
+              className={`w-full p-2 shadow-sm rounded-md dark:border-b border-slate-700 mb-2 outline-none resize-none ${getLightModeColor(
                 item.todoColor
               )} ${getDarkModeColor(item.todoColor)}`}
               onKeyDown={handleKeyDown}
