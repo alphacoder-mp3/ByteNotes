@@ -88,7 +88,7 @@ export default function CreateNotes({ userId }: { userId: string }) {
                 id="title"
                 placeholder="Title"
                 required
-                className={`w-full p-2 dark:border-b border-slate-700 mb-2 outline-none ${
+                className={`w-full p-2 shadow rounded-md dark:border-b border-slate-700 mb-2 outline-none ${
                   bgColor ? bgColor : ''
                 }`}
               />
@@ -99,7 +99,7 @@ export default function CreateNotes({ userId }: { userId: string }) {
                 rows={1}
                 required
                 autoFocus
-                className={`w-full p-2 dark:border-b border-slate-700 mb-2 outline-none resize-none ${
+                className={`w-full p-2 shadow rounded-md dark:border-b border-slate-700 mb-2 outline-none resize-none ${
                   bgColor ? bgColor : ''
                 }`}
                 onKeyDown={handleKeyDown}
