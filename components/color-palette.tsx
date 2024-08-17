@@ -31,7 +31,9 @@ export const ColorPalette = ({
         <div
           className={`h-6 w-6 rounded-full hover:border dark:border-white border-black cursor-pointer ${getLightModeColor(
             color
-          )} ${getDarkModeColor(color)} group`}
+          )} ${getDarkModeColor(color)} group ${
+            color == 'default' && 'border border-gray-300 dark:border-gray-600'
+          }`}
           key={color}
           onClick={() => setBgColor(color)}
         >
