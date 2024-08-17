@@ -5,6 +5,7 @@ import { User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { setSession } from '@/lib/session';
 import { clearSession } from '@/lib/session';
+import { redirect } from 'next/navigation';
 
 export async function signUp(
   formData: FormData
@@ -112,5 +113,6 @@ export async function signIn(formData: FormData): Promise<{
 
 export async function signOut() {
   clearSession();
+  redirect('/signin');
   return { success: true, message: 'Signed out successfully', error: false };
 }
