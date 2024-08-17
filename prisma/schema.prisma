@@ -14,28 +14,30 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(cuid())
-  username   String   @unique
-  password   String
-  firstName  String
-  lastName   String
-  profilePic String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  todos      Todo[]
+  id            String         @id @default(cuid())
+  username      String         @unique
+  password      String
+  firstName     String
+  lastName      String
+  profilePic    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  todos         Todo[]
+  collaborators Collaborator[]
 }
 
 model Todo {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  done        Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
-  todoColor   String   @default("")
-  images      Image[] // Relation to the Image model
+  id            String         @id @default(cuid())
+  title         String
+  description   String
+  done          Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String
+  todoColor     String         @default("")
+  images        Image[] // Relation to the Image model
+  collaborators Collaborator[]
 }
 
 model Image {
@@ -45,4 +47,16 @@ model Image {
   todoId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Collaborator {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  todo      Todo     @relation(fields: [todoId], references: [id])
+  todoId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([userId, todoId])
 }
