@@ -1,6 +1,10 @@
 import { Dispatch, RefObject, SetStateAction } from 'react';
 import { Color } from '@/hooks/useColorPalette';
-import { getLightModeColor, getDarkModeColor } from '@/common/common';
+import {
+  getLightModeColor,
+  getDarkModeColor,
+  getColorName,
+} from '@/common/common';
 import { cn } from '@/lib/utils';
 import { type ClassValue } from 'clsx';
 
@@ -27,10 +31,16 @@ export const ColorPalette = ({
         <div
           className={`h-6 w-6 rounded-full hover:border dark:border-white border-black cursor-pointer ${getLightModeColor(
             color
-          )} ${getDarkModeColor(color)}`}
+          )} ${getDarkModeColor(color)} group`}
           key={color}
           onClick={() => setBgColor(color)}
-        />
+        >
+          <div className="hidden group-hover:flex items-center justify-center mt-6">
+            <div className="px-2 text-sm bg-gray-600 text-white rounded-md">
+              {getColorName(color)}
+            </div>
+          </div>
+        </div>
       ))}
     </div>
   );
