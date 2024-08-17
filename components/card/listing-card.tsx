@@ -263,23 +263,17 @@ export const ListingCard = ({
                 <Palette size={16} className="cursor-pointer" />
               </DialogTrigger>
 
-              <DialogContent className="w-screen">
+              <DialogContent className="bg-transparent border-none">
                 <DialogTitle className="sr-only">Color Palette</DialogTitle>
                 <DialogDescription className="sr-only">
                   Color Palette inside the card
                 </DialogDescription>
-                <div
-                  className="fixed inset-0 min-h-fit md:w-[600] lg:w-[1000] lg:h-12 px-2 py-4 lg:py-0 bg-zinc-900 flex items-center justify-center gap-2 rounded-xl z-10 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] flex-wrap"
-                  ref={colorPaletteRef}
-                >
-                  {bgColors.map(color => (
-                    <div
-                      className={`${color} h-6 w-6 rounded-full hover:border border-white cursor-pointer`}
-                      key={color}
-                      onClick={() => setBgColor(color)}
-                    />
-                  ))}
-                </div>
+                <ColorPalette
+                  className={`md:w-full md:h-24 md:py-4 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]`}
+                  colorPaletteRef={colorPaletteRef}
+                  bgColors={bgColors}
+                  setBgColor={setBgColor}
+                />
               </DialogContent>
             </Dialog>
             <ImageUploadButton todoId={item.id} />

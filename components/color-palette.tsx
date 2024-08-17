@@ -22,7 +22,7 @@ export const ColorPalette = ({
   return (
     <div
       className={cn(
-        'fixed inset-0 max-w-full min-h-fit md:h-12 px-2 py-4 md:py-0 dark:bg-zinc-900 bg-zinc-100 flex items-center justify-center flex-wrap gap-2 dark:rounded-xl z-50',
+        'fixed inset-0 max-w-full min-h-fit md:h-12 px-2 py-4 md:py-0 dark:bg-zinc-900 bg-zinc-100 flex items-center justify-center flex-wrap gap-2 rounded-xl z-50',
         className
       )}
       ref={colorPaletteRef}
@@ -35,7 +35,7 @@ export const ColorPalette = ({
           key={color}
           onClick={() => setBgColor(color)}
         >
-          <div className="hidden group-hover:flex items-center justify-center mt-6">
+          <div className="hidden group-hover:flex items-center justify-center mt-6 relative z-50">
             <div className="px-2 text-sm bg-gray-600 text-white rounded-md">
               {getColorName(color)}
             </div>
