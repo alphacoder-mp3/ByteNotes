@@ -25,6 +25,10 @@ export default async function ProfilePage() {
       </Link>
 
       <h1 className="m-4">Profile</h1>
+      <div className="m-4">
+        {!UserDetails?.profilePic && 'Add your profile picture here'}
+      </div>
+
       {UserDetails?.profilePic && (
         <div className="rounded-full border-violet-600 border-8 overflow-hidden w-40 h-40 mb-4">
           <Image
