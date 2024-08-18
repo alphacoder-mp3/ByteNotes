@@ -32,6 +32,8 @@ import {
 } from 'lucide-react';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { getLightModeColor, getDarkModeColor } from '@/common/common';
+import { Collaborator } from '@prisma/client';
+import { Collaboration } from '../collaboration';
 
 type ImageProps = {
   url: string;
@@ -43,6 +45,7 @@ export const ListingCard = ({
   children,
   className,
   userId,
+  collabs,
 }: {
   item: {
     id: string;
@@ -54,6 +57,7 @@ export const ListingCard = ({
   children: React.ReactNode;
   className: string;
   userId: string;
+  collabs?: Collaborator[];
 }) => {
   const {
     isOpened,
@@ -136,23 +140,24 @@ export const ListingCard = ({
       setBgColor('');
     }
   }, [bgColor]);
-
+  console.log({ collabs });
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Card key={item.id} className={className + ' group'}>
           {children}
-          <div className="flex items-center gap-6 absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+          <div className="flex items-center gap-6 absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <Palette
               size={16}
               onClick={e => {
                 e.preventDefault();
                 setIsOpened(true);
               }}
+              className="cursor-pointer"
             />
             <ImageUploadButton todoId={item.id} />
-            <CircleUser size={16} />
-            <EllipsisVertical size={16} />
+            <Collaboration collabs={collabs} todoId={item.id} userId={userId} />
+            <EllipsisVertical size={16} className="cursor-pointer" />
           </div>
           <div className="absolute top-[-10] left-[-10] opacity-0 group-hover:opacity-100 transition-opacity">
             <CircleCheck size={24} fill="#ffffff" stroke="#000000" />
@@ -277,7 +282,7 @@ export const ListingCard = ({
               </DialogContent>
             </Dialog>
             <ImageUploadButton todoId={item.id} />
-            <CircleUser size={16} className="cursor-pointer" />
+            <Collaboration collabs={collabs} todoId={item.id} userId={userId} />
             <EllipsisVertical size={16} className="cursor-pointer" />
           </div>
           <div className="absolute top-2 right-2">

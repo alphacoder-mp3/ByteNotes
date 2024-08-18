@@ -1,9 +1,14 @@
 'use server';
 import prisma from '@/lib/db';
+import { Collaborator, User } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
-export async function addCollaborator(todoId: string, username: string) {
+export async function addCollaborator(
+  todoId: string,
+  username: string
+): Promise<{ success: boolean; message: string; data?: Collaborator }> {
   try {
-    return await prisma.$transaction(async prisma => {
+    const result = await prisma.$transaction(async prisma => {
       const user = await prisma.user.findUnique({
         where: { username },
       });
@@ -31,34 +36,64 @@ export async function addCollaborator(todoId: string, username: string) {
         },
       });
     });
+
+    revalidatePath('/');
+    return {
+      success: true,
+      message: 'Collaborator added successfully',
+      data: result,
+    };
   } catch (error) {
     console.error('Error adding collaborator:', error);
-    throw error;
+    return {
+      success: false,
+      message: (error as any) ?? 'error while fetching collaborator data',
+    };
   }
 }
 
-export async function removeCollaborator(todoId: string, userId: string) {
+export async function removeCollaborator(
+  todoId: string,
+  userId: string
+): Promise<{
+  success: boolean;
+  message: string;
+  data?: { count: number };
+}> {
   try {
-    return await prisma.collaborator.deleteMany({
+    const result = await prisma.collaborator.deleteMany({
       where: {
         todoId,
         userId,
       },
     });
+
+    revalidatePath('/');
+    return {
+      success: true,
+      message: 'Collaborator removed successfully',
+      data: result,
+    };
   } catch (error) {
     console.error('Error removing collaborator:', error);
-    throw error;
+    return { success: false, message: error as any };
   }
 }
 
-export async function getCollaborators(todoId: string) {
+export async function getCollaborators(todoId: string): Promise<{
+  success: boolean;
+  message?: string;
+  data?: (Collaborator & { user: User })[];
+}> {
   try {
-    return await prisma.collaborator.findMany({
+    const collaborators = await prisma.collaborator.findMany({
       where: { todoId },
       include: { user: true },
     });
+
+    return { success: true, data: collaborators };
   } catch (error) {
     console.error('Error getting collaborators:', error);
-    throw error;
+    return { success: false, message: error as any };
   }
 }

@@ -2,10 +2,16 @@
 import { getTodo } from '@/app/actions/todo-actions';
 // import { PaginateTodo } from '@/components/paginate-todo';
 import { parseFormattedText } from '@/common/formatted-text';
-import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
 import { ListingCard } from './card/listing-card';
 import Image from 'next/image';
 import { getLightModeColor, getDarkModeColor } from '@/common/common';
+import { getCollaborators } from '@/app/actions/collaborate-actions';
 
 const GetNotes = async ({
   userId,
@@ -24,43 +30,62 @@ const GetNotes = async ({
   return (
     <section className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 p-4 mt-10">
       {todo &&
-        todo.map(item => (
-          <ListingCard
-            key={item.id}
-            item={item}
-            userId={userId}
-            className={`relative mb-4 border dark:border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${getLightModeColor(
-              item.todoColor
-            )} ${getDarkModeColor(item.todoColor)}`}
-          >
-            <CardHeader className="py-2 px-4">
-              {item.images?.map((item: any) => (
-                <Image
-                  src={item.url}
-                  key={item.id}
-                  alt="Image"
-                  width={200}
-                  height={200}
-                  className="h-full w-full rounded"
-                  priority={true}
-                />
-              ))}
-              <CardTitle className="font-bold text-lg">{item.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="py-2 px-4 mb-8">
-              {parseFormattedText(item.description)}
-            </CardContent>
-            {/* <CardFooter className="py-2 px-4 mb-8">
-              <div
-                className={`${
-                  item.done ? 'bg-emerald-800' : 'bg-amber-800'
-                } py-1 px-2 text-sm rounded-xl`}
-              >
-                {item.done ? 'Done' : 'Pending'}
-              </div>
-            </CardFooter> */}
-          </ListingCard>
-        ))}
+        todo.map(async item => {
+          const { data: collabs, success } = await getCollaborators(item.id);
+
+          return (
+            <ListingCard
+              key={item.id}
+              item={item}
+              userId={userId}
+              className={`relative mb-4 border dark:border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column group ${getLightModeColor(
+                item.todoColor
+              )} ${getDarkModeColor(item.todoColor)}`}
+              collabs={collabs}
+            >
+              <CardHeader className="py-2 px-4">
+                {item.images?.map((item: any) => (
+                  <Image
+                    src={item.url}
+                    key={item.id}
+                    alt="Image"
+                    width={200}
+                    height={200}
+                    className="h-full w-full rounded"
+                    priority={true}
+                  />
+                ))}
+                <CardTitle className="font-bold text-lg">
+                  {item.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="py-2 px-4 mb-8">
+                {parseFormattedText(item.description)}
+              </CardContent>
+              <CardFooter className="">
+                {/* <div className="collaborators"> */}
+                {collabs?.map(item => (
+                  <Image
+                    key={item.user.id}
+                    src={item.user.profilePic || '/default-avatar.png'}
+                    alt={item.user.username}
+                    className="w-6 h-6 rounded-full py-2 px-4 mb-8"
+                    height={50}
+                    width={50}
+                  />
+                ))}
+                {/* </div> */}
+                {/* <div
+                  className={`${
+                    item.done ? 'bg-emerald-800' : 'bg-amber-800'
+                  } py-1 px-2 text-sm rounded-xl`}
+                >
+                  {item.done ? 'Done' : 'Pending'}
+                </div> */}
+              </CardFooter>
+            </ListingCard>
+          );
+        })}
     </section>
   );
 };
