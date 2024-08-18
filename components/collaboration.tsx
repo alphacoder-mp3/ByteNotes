@@ -19,7 +19,7 @@ import { useToast } from '@/components/ui/use-toast';
 type CollaboratorWithUser = Collaborator & { user: User };
 
 interface CollaborationProps {
-  collabs: CollaboratorWithUser[];
+  collabs: CollaboratorWithUser[] | undefined;
   userId: string;
   todoId: string;
 }
@@ -106,7 +106,7 @@ export const Collaboration: React.FC<CollaborationProps> = ({
           <Button type="submit">Add Collaborator</Button>
         </form>
         <ul className="mt-4 space-y-2">
-          {collabs.map(item => (
+          {collabs?.map(item => (
             <li
               key={item.user.id}
               className="flex justify-between items-center"

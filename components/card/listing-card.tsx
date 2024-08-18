@@ -59,7 +59,7 @@ export const ListingCard = ({
   children: React.ReactNode;
   className: string;
   userId: string;
-  collabs: CollaboratorWithUser[];
+  collabs: CollaboratorWithUser[] | undefined;
 }) => {
   const {
     isOpened,
