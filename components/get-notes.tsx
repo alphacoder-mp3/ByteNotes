@@ -12,7 +12,7 @@ import { ListingCard } from './card/listing-card';
 import Image from 'next/image';
 import { getLightModeColor, getDarkModeColor } from '@/common/common';
 import { getCollaborators } from '@/app/actions/collaborate-actions';
-import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const GetNotes = async ({
   userId,
@@ -65,15 +65,18 @@ const GetNotes = async ({
               </CardContent>
               <CardFooter className="mb-4">
                 {collabs?.map(item => (
-                  <Avatar key={item.user.id}>
+                  <Avatar
+                    key={item.user.id}
+                    className="flex items-center justify-center"
+                  >
                     <AvatarImage
                       src={item.user.profilePic as string}
                       alt="AS"
-                      className="cursor-pointer w-6 h-6 rounded-full"
+                      className="cursor-pointer w-7 h-7 rounded-full"
                       width={50}
                       height={50}
                     />
-                    <AvatarFallback className="cursor-pointer h-9 w-9 mx-4 rounded-full">
+                    <AvatarFallback className="cursor-pointer w-7 h-7 p-2 shadow rounded-full dark:border border-gray-600 text-xs">
                       {item.user?.firstName.charAt(0)}
                       {item.user?.lastName.charAt(0)}
                     </AvatarFallback>

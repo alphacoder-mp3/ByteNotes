@@ -32,12 +32,15 @@ import {
 } from 'lucide-react';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { getLightModeColor, getDarkModeColor } from '@/common/common';
-import { Collaborator } from '@prisma/client';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Collaborator, User } from '@prisma/client';
 
 type ImageProps = {
   url: string;
   id: string;
 };
+
+type CollaboratorWithUser = Collaborator & { user: User };
 
 export const ListingCard = ({
   item,
@@ -56,7 +59,7 @@ export const ListingCard = ({
   children: React.ReactNode;
   className: string;
   userId: string;
-  collabs?: Collaborator[];
+  collabs: CollaboratorWithUser[];
 }) => {
   const {
     isOpened,
@@ -259,6 +262,23 @@ export const ListingCard = ({
               }
             />
           </form>
+          <div className="flex items-center ">
+            {collabs?.map(item => (
+              <Avatar key={item.user.id} className="flex items-center">
+                <AvatarImage
+                  src={item.user.profilePic as string}
+                  alt="AS"
+                  className="cursor-pointer w-7 h-7 rounded-full"
+                  width={50}
+                  height={50}
+                />
+                <AvatarFallback className="cursor-pointer w-7 h-7 p-2 shadow rounded-full dark:border border-gray-600 text-xs">
+                  {item.user?.firstName.charAt(0)}
+                  {item.user?.lastName.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+            ))}
+          </div>
         </DialogHeader>
         <DialogFooter>
           <div className="flex items-center gap-6 absolute bottom-4 left-4">

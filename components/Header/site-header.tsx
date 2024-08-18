@@ -6,7 +6,7 @@ import { CommandMenu } from '@/components/command-meu';
 import { Icons } from '@/components/icons';
 import { ModeToggle } from '@/components/mode-toggle';
 import { buttonVariants } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User } from '@prisma/client';
 import { useServerSession } from '@/hooks/useServerSession';
 import { GetUserDetails } from '@/common/get-user-details';
@@ -68,13 +68,13 @@ export async function SiteHeader() {
             </Link>
             <ModeToggle />
             <Link href={'/profile'}>
-              <Avatar>
+              <Avatar className="flex justify-center items-center mx-2">
                 <AvatarImage
                   src={UserDetails?.profilePic || ''}
                   alt="AS"
-                  className="cursor-pointer h-9 w-9 mx-4 rounded-full"
+                  className="cursor-pointer h-9 w-9 rounded-full"
                 />
-                <AvatarFallback className="cursor-pointer h-9 w-9 mx-4 rounded-full">
+                <AvatarFallback className="cursor-pointer h-9 w-9 rounded-full p-2 shadow dark:border border-gray-600">
                   {UserDetails?.firstName.charAt(0)}
                   {UserDetails?.lastName.charAt(0)}
                 </AvatarFallback>
