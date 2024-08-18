@@ -6,6 +6,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { useToast } from '@/components/ui/use-toast';
 import { handleKeyDown, autoResizeTextarea } from '@/common/utility';
 import { ImageUploadButton } from '@/components/upload-image';
+import { Collaboration } from '@/components/collaboration';
 import { ColorPalette } from '@/components/color-palette';
 import { deleteImage } from '@/app/actions/delete-todo-image';
 import { updateTodo } from '@/app/actions/todo-actions';
@@ -24,7 +25,6 @@ import { useColorPalette } from '@/hooks/useColorPalette';
 import {
   EllipsisVertical,
   CircleCheck,
-  CircleUser,
   Palette,
   Pin,
   Trash2,
@@ -33,7 +33,6 @@ import {
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { getLightModeColor, getDarkModeColor } from '@/common/common';
 import { Collaborator } from '@prisma/client';
-import { Collaboration } from '../collaboration';
 
 type ImageProps = {
   url: string;
@@ -140,7 +139,7 @@ export const ListingCard = ({
       setBgColor('');
     }
   }, [bgColor]);
-  console.log({ collabs });
+
   return (
     <Dialog>
       <DialogTrigger asChild>
