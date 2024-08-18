@@ -55,6 +55,7 @@ model Collaborator {
   userId    String
   todo      Todo     @relation(fields: [todoId], references: [id])
   todoId    String
+  isOwner   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 

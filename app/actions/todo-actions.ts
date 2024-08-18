@@ -17,11 +17,6 @@ export async function createTodo(
   userId: string,
   bgColor?: string
 ): Promise<{ success: boolean; error: boolean; message: string }> {
-  //   const session = await getServerSession(authOptions);
-  //   if (!session) {
-  //     throw new Error('You must be logged in to create a todo');
-  //   }
-
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
   const done = formData.get('done') === 'true';
@@ -34,14 +29,25 @@ export async function createTodo(
     };
   }
 
-  await prisma.todo.create({
-    data: {
-      title,
-      description,
-      done,
-      todoColor: bgColor,
-      user: { connect: { id: userId } },
-    },
+  await prisma.$transaction(async prisma => {
+    const todo = await prisma.todo.create({
+      data: {
+        title,
+        description,
+        done,
+        todoColor: bgColor,
+        user: { connect: { id: userId } },
+      },
+    }); //previously we just had this call prisma todo create call
+
+    // Automatically add the creator as a collaborator with isOwner: true
+    await prisma.collaborator.create({
+      data: {
+        userId,
+        todoId: todo.id,
+        isOwner: true,
+      },
+    });
   });
 
   revalidatePath('/');

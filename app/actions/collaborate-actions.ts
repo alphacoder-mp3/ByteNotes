@@ -5,7 +5,8 @@ import { revalidatePath } from 'next/cache';
 
 export async function addCollaborator(
   todoId: string,
-  username: string
+  username: string,
+  isOwner: boolean = false
 ): Promise<{ success: boolean; message: string; data?: Collaborator }> {
   try {
     const result = await prisma.$transaction(async prisma => {
@@ -33,6 +34,7 @@ export async function addCollaborator(
         data: {
           userId: user.id,
           todoId,
+          isOwner,
         },
       });
     });
@@ -61,6 +63,19 @@ export async function removeCollaborator(
   data?: { count: number };
 }> {
   try {
+    const collaborator = await prisma.collaborator.findUnique({
+      where: {
+        userId_todoId: {
+          userId,
+          todoId,
+        },
+      },
+    });
+
+    if (collaborator?.isOwner) {
+      throw new Error('Cannot remove the owner from the todo'); //Even tho we will be handling this thru front end, and this was still server action so can be skipped but we still added this check
+    }
+
     const result = await prisma.collaborator.deleteMany({
       where: {
         todoId,
