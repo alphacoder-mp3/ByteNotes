@@ -101,19 +101,35 @@ export async function updateTodo(
   userId: string,
   bgColor?: string
 ): Promise<{ success: boolean; error: boolean; message: string }> {
-  //   const session = await getServerSession(authOptions);
-  //   if (!session) {
-  //     throw new Error('You must be logged in to delete a todo');
-  //   }
-
   try {
     const todo = await prisma.todo.findUnique({
       where: { id },
-      select: { userId: true },
+      include: {
+        collaborators: {
+          select: { userId: true },
+        },
+      },
     });
 
     if (!todo) {
-      throw new Error('Todo not found');
+      return {
+        success: false,
+        error: true,
+        message: 'Todo not found',
+      };
+    }
+
+    const isOwner = todo.userId === userId;
+    const isCollaborator = todo.collaborators.some(
+      collab => collab.userId === userId
+    );
+
+    if (!isOwner && !isCollaborator) {
+      return {
+        success: false,
+        error: true,
+        message: 'You are not authorized to update this todo',
+      };
     }
 
     const title = formData.get('title') as string;
@@ -125,18 +141,6 @@ export async function updateTodo(
         success: false,
         error: true,
         message: 'Title and description are required',
-      };
-    }
-
-    // if (todo.userId !== session.user.id) {
-    //   throw new Error('You are not authorized to update this todo');
-    // }
-
-    if (todo.userId !== userId) {
-      return {
-        success: false,
-        error: true,
-        message: 'You are not authorized to update this todo',
       };
     }
 
@@ -158,7 +162,13 @@ export async function updateTodo(
       message: 'Updated todo successfully',
     };
   } catch (error) {
-    return { success: false, error: true, message: error as string };
+    console.error('Error updating todo:', error);
+    return {
+      success: false,
+      error: true,
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+    };
   }
 }
 
@@ -206,7 +216,7 @@ export async function getTodo(
     const [todos, totalCount] = await Promise.all([
       prisma.todo.findMany({
         where: {
-          userId,
+          OR: [{ userId }, { collaborators: { some: { userId } } }],
         },
         select: {
           title: true,
