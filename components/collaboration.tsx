@@ -112,15 +112,13 @@ export const Collaboration: React.FC<CollaborationProps> = ({
               className="flex justify-between items-center"
             >
               <span>{item.user.username}</span>
-              {item.user.id !== userId && (
-                <Button
-                  onClick={() => handleRemove(item.user.id)}
-                  variant="destructive"
-                  size="sm"
-                >
-                  Remove
-                </Button>
-              )}
+              <Button
+                onClick={() => handleRemove(item.user.id)}
+                variant="destructive"
+                size="sm"
+              >
+                Remove
+              </Button>
             </li>
           ))}
         </ul>
