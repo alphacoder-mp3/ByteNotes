@@ -59,29 +59,20 @@ const GetNotes = async ({
                   {item.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="py-2 px-4 mb-8">
+              <CardContent className="py-2 px-4">
                 {parseFormattedText(item.description)}
               </CardContent>
-              <CardFooter className="">
-                {/* <div className="collaborators"> */}
+              <CardFooter className="mb-4">
                 {collabs?.map(item => (
                   <Image
                     key={item.user.id}
                     src={item.user.profilePic || '/default-avatar.png'}
                     alt={item.user.username}
-                    className="w-6 h-6 rounded-full py-2 px-4 mb-8"
+                    className="w-6 h-6 rounded-full"
                     height={50}
                     width={50}
                   />
                 ))}
-                {/* </div> */}
-                {/* <div
-                  className={`${
-                    item.done ? 'bg-emerald-800' : 'bg-amber-800'
-                  } py-1 px-2 text-sm rounded-xl`}
-                >
-                  {item.done ? 'Done' : 'Pending'}
-                </div> */}
               </CardFooter>
             </ListingCard>
           );
