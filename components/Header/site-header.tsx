@@ -23,9 +23,15 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
         {/* component if required here*/}
-        <h1 className="hidden sm:block">
-          Welcome {UserDetails?.firstName} {UserDetails?.lastName}!
-        </h1>
+        <div className="items-center gap-2 hidden sm:flex">
+          <div className="rounded-md w-fit flex items-center">
+            <Icons.logo className="h-6 w-6" /> ByteNotes.
+          </div>
+          <p>|</p>
+          <h1 className="border border-indigo-400 rounded-sm px-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white">
+            Welcome {UserDetails?.firstName} {UserDetails?.lastName}!
+          </h1>
+        </div>
 
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
