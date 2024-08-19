@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import { DialogProps } from '@radix-ui/react-dialog';
 import { LaptopIcon, MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
@@ -19,7 +18,6 @@ import {
 } from '@/components/ui/command';
 
 export function CommandMenu({ ...props }: DialogProps) {
-  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const { setTheme } = useTheme();
 
