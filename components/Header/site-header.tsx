@@ -29,7 +29,7 @@ export async function SiteHeader() {
           </div>
           <p>|</p>
           <h1 className="border border-indigo-400 rounded-sm px-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white">
-            Welcome {UserDetails?.firstName} {UserDetails?.lastName}!
+            Welcome, {UserDetails?.firstName} {UserDetails?.lastName}!
           </h1>
         </div>
 
