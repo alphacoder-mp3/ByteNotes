@@ -46,10 +46,12 @@ export async function addCollaborator(
       data: result,
     };
   } catch (error) {
-    console.error('Error adding collaborator:', error);
     return {
       success: false,
-      message: (error as any) ?? 'error while fetching collaborator data',
+      message:
+        error instanceof Error
+          ? error.message
+          : 'error while fetching collaborator data',
     };
   }
 }
@@ -90,8 +92,13 @@ export async function removeCollaborator(
       data: result,
     };
   } catch (error) {
-    console.error('Error removing collaborator:', error);
-    return { success: false, message: error as any };
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : 'error while removing the collaborator',
+    };
   }
 }
 
@@ -108,7 +115,12 @@ export async function getCollaborators(todoId: string): Promise<{
 
     return { success: true, data: collaborators };
   } catch (error) {
-    console.error('Error getting collaborators:', error);
-    return { success: false, message: error as any };
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : `error while fetching the collaborator's data`,
+    };
   }
 }

@@ -58,11 +58,6 @@ export async function deleteTodo(
   id: string,
   userId: string
 ): Promise<{ success: boolean; error: boolean; message: string }> {
-  //   const session = await getServerSession(authOptions);
-  //   if (!session) {
-  //     throw new Error('You must be logged in to delete a todo');
-  //   }
-
   try {
     const todo = await prisma.todo.findUnique({
       where: { id },
@@ -72,10 +67,6 @@ export async function deleteTodo(
     if (!todo) {
       return { success: false, error: true, message: 'Todo not found' };
     }
-
-    // if (todo.userId !== session.user.id) {
-    //   throw new Error('You are not authorized to delete this todo');
-    // }
 
     if (todo.userId !== userId) {
       return {

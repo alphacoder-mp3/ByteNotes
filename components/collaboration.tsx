@@ -4,10 +4,12 @@ import React, { FormEvent, useState } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTrigger,
+  DialogTitle,
 } from '@/components/ui/dialog';
-import { CircleUser } from 'lucide-react';
+import { CircleUser, Crown } from 'lucide-react';
 import { Collaborator, User } from '@prisma/client';
 import { Button } from './ui/button';
 import {
@@ -40,22 +42,16 @@ export const Collaboration: React.FC<CollaborationProps> = ({
     if (collaborator) {
       try {
         const result = await addCollaborator(todoId, collaborator);
-        if (!result.success) {
-          toast({
-            title: 'success',
-            description: result.message,
-          });
-        } else {
-          toast({
-            title: 'error',
-            description: result.message,
-            variant: 'destructive',
-          });
-          setIsOpen(false); // Optionally close the dialog or show a success message
-        }
-      } catch (error) {
         toast({
-          title: 'error',
+          title: result.success ? 'Success' : 'Error',
+          description: result.message,
+          variant: result.success ? 'default' : 'destructive',
+        });
+        setIsOpen(false); // Optionally close the dialog or show a success message
+      } catch (error) {
+        console.log({ error });
+        toast({
+          title: 'Error',
           description: 'something went wrong',
           variant: 'destructive',
         });
@@ -66,15 +62,14 @@ export const Collaboration: React.FC<CollaborationProps> = ({
   const handleRemove = async (collaboratorId: string) => {
     try {
       const result = await removeCollaborator(todoId, collaboratorId);
-      if (!result.success) {
-        toast({
-          title: 'success',
-          description: result.message,
-        });
-      }
+      toast({
+        title: result.success ? 'Success' : 'Error',
+        description: result.message,
+        variant: result.success ? 'default' : 'destructive',
+      });
     } catch (error) {
       toast({
-        title: 'error',
+        title: 'Error',
         description: 'An error occurred while removing the collaborator.',
         variant: 'destructive',
       });
@@ -94,34 +89,48 @@ export const Collaboration: React.FC<CollaborationProps> = ({
         />
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>Manage Collaborators</DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="collaborator"
-            id="collaborator"
-            placeholder="Add collaborator by username"
-            className="w-full p-2 border rounded"
-          />
-          <Button type="submit">Add Collaborator</Button>
-        </form>
-        <ul className="mt-4 space-y-2">
-          {collabs?.map(item => (
-            <li
-              key={item.user.id}
-              className="flex justify-between items-center"
-            >
-              <span>{item.user.username}</span>
-              <Button
-                onClick={() => handleRemove(item.user.id)}
-                variant="destructive"
-                size="sm"
+        <DialogHeader>
+          <DialogTitle>Manage Collaborators</DialogTitle>
+          <DialogDescription className="sr-only">
+            {' '}
+            Manage collaborators on the notes - add or remove{' '}
+          </DialogDescription>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="collaborator"
+              id="collaborator"
+              placeholder="Add collaborator by username"
+              className="w-full p-2 border rounded"
+            />
+            <Button type="submit">Add Collaborator</Button>
+          </form>
+          <ul className="mt-4 space-y-2">
+            {collabs?.map(item => (
+              <li
+                key={item.user.id}
+                className="flex justify-between items-center"
               >
-                Remove
-              </Button>
-            </li>
-          ))}
-        </ul>
+                <span>{item.user.username}</span>
+                {!item.isOwner && (
+                  <Button
+                    onClick={() => handleRemove(item.user.id)}
+                    variant="destructive"
+                    size="sm"
+                  >
+                    Remove
+                  </Button>
+                )}
+                {item.isOwner && (
+                  <span className="flex items-center justify-center gap-2">
+                    (Owner)
+                    <Crown size={20} />
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </DialogHeader>
       </DialogContent>
     </Dialog>
   );
