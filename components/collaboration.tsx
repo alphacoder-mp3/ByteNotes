@@ -22,13 +22,11 @@ type CollaboratorWithUser = Collaborator & { user: User };
 
 interface CollaborationProps {
   collabs: CollaboratorWithUser[] | undefined;
-  userId: string;
   todoId: string;
 }
 
 export const Collaboration: React.FC<CollaborationProps> = ({
   collabs,
-  userId,
   todoId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);

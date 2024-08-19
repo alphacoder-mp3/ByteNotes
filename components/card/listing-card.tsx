@@ -158,7 +158,7 @@ export const ListingCard = ({
               className="cursor-pointer"
             />
             <ImageUploadButton todoId={item.id} />
-            <Collaboration collabs={collabs} todoId={item.id} userId={userId} />
+            <Collaboration collabs={collabs} todoId={item.id} />
             <EllipsisVertical size={16} className="cursor-pointer" />
           </div>
           <div className="absolute top-[-10] left-[-10] opacity-0 group-hover:opacity-100 transition-opacity">
@@ -303,7 +303,7 @@ export const ListingCard = ({
               </DialogContent>
             </Dialog>
             <ImageUploadButton todoId={item.id} />
-            <Collaboration collabs={collabs} todoId={item.id} userId={userId} />
+            <Collaboration collabs={collabs} todoId={item.id} />
             <EllipsisVertical size={16} className="cursor-pointer" />
           </div>
           <div className="absolute top-2 right-2">
