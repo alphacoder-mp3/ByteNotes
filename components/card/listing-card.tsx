@@ -170,7 +170,7 @@ export const ListingCard = ({
         </Card>
       </DialogTrigger>
       <DialogContent
-        className={`mb-4 border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${getLightModeColor(
+        className={`mb-4 max-h-screen border border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column ${getLightModeColor(
           item.todoColor
         )} ${getDarkModeColor(item.todoColor)}`}
         ref={dialogContentRef}
