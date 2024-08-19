@@ -24,9 +24,13 @@ export async function SiteHeader() {
       <div className="container flex h-14 max-w-screen-2xl items-center">
         {/* component if required here*/}
         <div className="items-center gap-2 hidden sm:flex">
-          <div className="rounded-md w-fit flex items-center">
+          <Link
+            href="/"
+            className="rounded-md w-fit flex items-center cursor-pointer"
+          >
             <Icons.logo className="h-6 w-6" /> ByteNotes.
-          </div>
+          </Link>
+
           <p>|</p>
           <h1 className="border border-indigo-400 rounded-sm px-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white">
             Welcome, {UserDetails?.firstName} {UserDetails?.lastName}!

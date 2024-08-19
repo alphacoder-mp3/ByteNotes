@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { CircleUser, Crown } from 'lucide-react';
 import { Collaborator, User } from '@prisma/client';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import {
   addCollaborator,
   removeCollaborator,
