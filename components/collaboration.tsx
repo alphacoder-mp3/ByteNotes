@@ -45,9 +45,7 @@ export const Collaboration: React.FC<CollaborationProps> = ({
           description: result.message,
           variant: result.success ? 'default' : 'destructive',
         });
-        setIsOpen(false); // Optionally close the dialog or show a success message
       } catch (error) {
-        console.log({ error });
         toast({
           title: 'Error',
           description: 'something went wrong',
