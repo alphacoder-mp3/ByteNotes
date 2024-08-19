@@ -7,6 +7,7 @@ import { Home } from 'lucide-react';
 import Link from 'next/link';
 import { SignOutButton } from '@/components/sign-out-button';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default async function ProfilePage() {
   const userId = await useServerSession();
@@ -25,22 +26,19 @@ export default async function ProfilePage() {
       </Link>
 
       <h1 className="m-4">Profile</h1>
-      <div className="m-4">
-        {!UserDetails?.profilePic && 'Add your profile picture here'}
-      </div>
-
-      {UserDetails?.profilePic && (
-        <div className="rounded-full border-violet-600 border-8 overflow-hidden w-40 h-40 mb-4">
-          <Image
-            src={UserDetails.profilePic}
-            alt="Profile Picture"
-            className="w-full h-full object-cover"
-            height={200}
-            width={200}
-            priority={true}
-          />
-        </div>
-      )}
+      <Avatar className="rounded-full border-violet-600 border-8 overflow-hidden w-40 h-40 mb-4">
+        <AvatarImage
+          src={UserDetails.profilePic as string}
+          alt="AS"
+          className="w-full h-full object-cover"
+          width={50}
+          height={50}
+        />
+        <AvatarFallback className="w-full h-full shadow text-6xl">
+          {UserDetails?.firstName.charAt(0)}
+          {UserDetails?.lastName.charAt(0)}
+        </AvatarFallback>
+      </Avatar>
 
       <ProfilePicUpload userId={userId} />
       <p className="p-4">@{UserDetails?.username}</p>
