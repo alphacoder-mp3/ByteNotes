@@ -1,6 +1,5 @@
 import { User } from '@prisma/client';
 import ProfilePicUpload from '@/components/profile-pic-upload';
-import Image from 'next/image';
 import { useServerSession } from '@/hooks/useServerSession';
 import { GetUserDetails } from '@/common/get-user-details';
 import { Home } from 'lucide-react';
@@ -42,8 +41,6 @@ export default async function ProfilePage() {
 
       <ProfilePicUpload userId={userId} />
       <p className="p-4">@{UserDetails?.username}</p>
-      {/* <p>Created At: {UserDetails?.createdAt?.toLocaleString()}</p>
-      <p>Last Updated: {UserDetails?.updatedAt?.toLocaleString()}</p> */}
       <SignOutButton />
     </div>
   );
