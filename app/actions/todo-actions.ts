@@ -183,6 +183,7 @@ export async function getTodo(
     done: boolean;
     id: string;
     todoColor: string;
+    updatedAt: Date;
     user: { username: string };
     images: {
       id: string;
@@ -221,6 +222,7 @@ export async function getTodo(
           done: true,
           id: true,
           todoColor: true,
+          updatedAt: true,
           user: {
             select: {
               username: true,

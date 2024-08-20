@@ -31,7 +31,11 @@ import {
   CircleX,
 } from 'lucide-react';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
-import { getLightModeColor, getDarkModeColor } from '@/common/common';
+import {
+  getLightModeColor,
+  getDarkModeColor,
+  secondFormatDate,
+} from '@/common/common';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Collaborator, User } from '@prisma/client';
 
@@ -55,6 +59,7 @@ export const ListingCard = ({
     title: string;
     description: string;
     images: ImageProps[];
+    updatedAt: Date;
   };
   children: React.ReactNode;
   className: string;
@@ -262,24 +267,29 @@ export const ListingCard = ({
               }
             />
           </form>
-          <div className="flex items-center ">
-            {collabs
-              ?.filter(item => item.user.id !== userId)
-              .map(item => (
-                <Avatar key={item.user.id} className="flex items-center">
-                  <AvatarImage
-                    src={item.user.profilePic as string}
-                    alt="AS"
-                    className="cursor-pointer w-7 h-7 rounded-full"
-                    width={50}
-                    height={50}
-                  />
-                  <AvatarFallback className="cursor-pointer w-7 h-7 p-2 shadow rounded-full dark:border border-gray-600 text-xs">
-                    {item.user?.firstName.charAt(0)}
-                    {item.user?.lastName.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-              ))}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center flex-wrap">
+              {collabs
+                ?.filter(item => item.user.id !== userId)
+                .map(item => (
+                  <Avatar key={item.user.id} className="flex items-center">
+                    <AvatarImage
+                      src={item.user.profilePic as string}
+                      alt="AS"
+                      className="cursor-pointer w-7 h-7 rounded-full"
+                      width={50}
+                      height={50}
+                    />
+                    <AvatarFallback className="cursor-pointer w-7 h-7 p-2 shadow rounded-full dark:border border-gray-600 text-xs">
+                      {item.user?.firstName.charAt(0)}
+                      {item.user?.lastName.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+            </div>
+            <div className="text-gray-400 text-xs">
+              {secondFormatDate(item.updatedAt)}
+            </div>
           </div>
         </DialogHeader>
         <DialogFooter>
