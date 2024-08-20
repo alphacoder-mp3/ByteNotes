@@ -107,7 +107,10 @@ export const Collaboration: React.FC<CollaborationProps> = ({
                 key={item.user.id}
                 className="flex justify-between items-center"
               >
-                <span>{item.user.username}</span>
+                <span>
+                  {item.user.firstName} {item.user.lastName} (
+                  {item.user.username})
+                </span>
                 {!item.isOwner && (
                   <Button
                     onClick={() => handleRemove(item.user.id)}
