@@ -9,34 +9,33 @@ export async function addCollaborator(
   isOwner: boolean = false
 ): Promise<{ success: boolean; message: string; data?: Collaborator }> {
   try {
-    const result = await prisma.$transaction(async prisma => {
-      const user = await prisma.user.findUnique({
-        where: { username },
-      });
-      if (!user) {
-        throw new Error('User not found');
-      }
+    const user = await prisma.user.findUnique({
+      where: { username },
+    });
 
-      const existingCollaboration = await prisma.collaborator.findUnique({
-        where: {
-          userId_todoId: {
-            userId: user.id,
-            todoId,
-          },
-        },
-      });
+    if (!user) {
+      throw new Error('User not found');
+    }
 
-      if (existingCollaboration) {
-        throw new Error('User is already a collaborator');
-      }
-
-      return await prisma.collaborator.create({
-        data: {
+    const existingCollaboration = await prisma.collaborator.findUnique({
+      where: {
+        userId_todoId: {
           userId: user.id,
           todoId,
-          isOwner,
         },
-      });
+      },
+    });
+
+    if (existingCollaboration) {
+      throw new Error('User is already a collaborator');
+    }
+
+    const result = await prisma.collaborator.create({
+      data: {
+        userId: user.id,
+        todoId,
+        isOwner,
+      },
     });
 
     revalidatePath('/');
