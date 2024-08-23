@@ -21,6 +21,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useColorPalette } from '@/hooks/useColorPalette';
 import {
   EllipsisVertical,
@@ -38,6 +44,7 @@ import {
 } from '@/common/common';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Collaborator, User } from '@prisma/client';
+import { DeleteNotes } from '@/components/delete-notes';
 
 type ImageProps = {
   url: string;
@@ -164,7 +171,19 @@ export const ListingCard = ({
             />
             <ImageUploadButton todoId={item.id} />
             <Collaboration collabs={collabs} todoId={item.id} />
-            <EllipsisVertical size={16} className="cursor-pointer" />
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical size={16} className="cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <DeleteNotes id={item.id} userId={userId} />
+                </DropdownMenuItem>
+                <DropdownMenuItem>Add drawing</DropdownMenuItem>
+                <DropdownMenuItem>Show tick boxes</DropdownMenuItem>
+                <DropdownMenuItem>Make a copy</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div className="absolute top-[-10] left-[-10] opacity-0 group-hover:opacity-100 transition-opacity">
             <CircleCheck size={24} fill="#ffffff" stroke="#000000" />
@@ -314,7 +333,19 @@ export const ListingCard = ({
             </Dialog>
             <ImageUploadButton todoId={item.id} />
             <Collaboration collabs={collabs} todoId={item.id} />
-            <EllipsisVertical size={16} className="cursor-pointer" />
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical size={16} className="cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <DeleteNotes id={item.id} userId={userId} />
+                </DropdownMenuItem>
+                <DropdownMenuItem>Add drawing</DropdownMenuItem>
+                <DropdownMenuItem>Show tick boxes</DropdownMenuItem>
+                <DropdownMenuItem>Make a copy</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div className="absolute top-2 right-2">
             <Pin size={24} />
