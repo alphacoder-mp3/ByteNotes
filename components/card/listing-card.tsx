@@ -274,7 +274,7 @@ export const ListingCard = ({
               required
               autoFocus
               defaultValue={item.description}
-              className={`w-full p-2 shadow-sm rounded-md dark:border-b border-slate-700 mb-2 outline-none resize-none ${getLightModeColor(
+              className={`w-full max-h-96 overflow-x-scroll p-2 shadow-sm rounded-md dark:border-b border-slate-700 mb-2 outline-none resize-none ${getLightModeColor(
                 item.todoColor
               )} ${getDarkModeColor(item.todoColor)}`}
               onKeyDown={handleKeyDown}
