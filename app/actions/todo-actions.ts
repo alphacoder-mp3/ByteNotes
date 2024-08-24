@@ -37,6 +37,7 @@ export async function createTodo(
         done,
         todoColor: bgColor,
         user: { connect: { id: userId } },
+        lastModifiedBy: userId,
       },
     }); //previously we just had this call prisma todo create call
 
@@ -148,6 +149,7 @@ export async function updateTodo(
         description,
         done,
         todoColor: bgColor,
+        lastModifiedBy: userId,
       },
     });
 
@@ -184,6 +186,7 @@ export async function getTodo(
     id: string;
     todoColor: string;
     updatedAt: Date;
+    lastModifiedBy: string;
     user: { username: string };
     images: {
       id: string;
@@ -223,6 +226,7 @@ export async function getTodo(
           id: true,
           todoColor: true,
           updatedAt: true,
+          lastModifiedBy: true,
           user: {
             select: {
               username: true,
