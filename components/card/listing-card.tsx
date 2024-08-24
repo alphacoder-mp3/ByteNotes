@@ -9,7 +9,7 @@ import { ImageUploadButton } from '@/components/upload-image';
 import { Collaboration } from '@/components/collaboration';
 import { ColorPalette } from '@/components/color-palette';
 import { deleteImage } from '@/app/actions/delete-todo-image';
-import { updateTodo } from '@/app/actions/todo-actions';
+import { createTodo, updateTodo } from '@/app/actions/todo-actions';
 import { Card } from '@/components/ui/card';
 import {
   Dialog,
@@ -130,6 +130,15 @@ export const ListingCard = ({
     }
   };
 
+  async function copyNotes(formData: FormData) {
+    const res = await createTodo(formData, userId, bgColor);
+    toast({
+      title: res.error ? 'Uh oh! Something went wrong.' : 'success',
+      description: res.message,
+      variant: res.error ? 'destructive' : 'default',
+    });
+  }
+
   async function action(formData: FormData) {
     const res = await updateTodo(
       item.id,
@@ -180,8 +189,20 @@ export const ListingCard = ({
                   <DeleteNotes id={item.id} userId={userId} />
                 </DropdownMenuItem>
                 <DropdownMenuItem>Add drawing</DropdownMenuItem>
+                <DropdownMenuItem>Add label</DropdownMenuItem>
                 <DropdownMenuItem>Show tick boxes</DropdownMenuItem>
-                <DropdownMenuItem>Make a copy</DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={e => {
+                    e.stopPropagation();
+                    const formData = new FormData();
+                    formData.append('title', item.title);
+                    formData.append('description', item.description);
+                    copyNotes(formData);
+                  }}
+                >
+                  Make a copy
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -342,8 +363,20 @@ export const ListingCard = ({
                   <DeleteNotes id={item.id} userId={userId} />
                 </DropdownMenuItem>
                 <DropdownMenuItem>Add drawing</DropdownMenuItem>
+                <DropdownMenuItem>Add label</DropdownMenuItem>
                 <DropdownMenuItem>Show tick boxes</DropdownMenuItem>
-                <DropdownMenuItem>Make a copy</DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={e => {
+                    e.stopPropagation();
+                    const formData = new FormData();
+                    formData.append('title', item.title);
+                    formData.append('description', item.description);
+                    copyNotes(formData);
+                  }}
+                >
+                  Make a copy
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
