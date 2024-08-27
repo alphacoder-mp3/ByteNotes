@@ -5,7 +5,7 @@
 <h3 align="center">ByteNotes</h3>
 
 <p align="center">
-    The open-source Google Keep and Evernote alike software.
+    The open-source notes making application with features like collaboration in real time and much more.
     <br />
     <a href="https://akshayshinde.com"><strong>Learn more »</strong></a>
     <br />
@@ -62,3 +62,16 @@ We love our contributors! Here's how you can contribute:
 - [Open an issue](https://github.com/alphacoder-mp3/ByteNotes/issues) if you believe you've encountered a bug.
 - Follow the [local development guide](https://ByteNotes/docs/local-development) to get your local dev environment set up.
 - Make a [pull request](https://github.com/alphacoder-mp3/ByteNotes/pull) to add new features/make quality-of-life improvements/fix bugs.
+
+### For Local Development (with existing PostgreSQL)
+
+1. Copy `.env.example` to `.env` and update with your local PostgreSQL and Cloudinary credentials.
+2. Update the `DATABASE_URL` in `docker-compose.yml` to use `host.docker.internal` instead of `db`.
+3. Run `docker-compose -f docker/docker-compose.yml up --build`
+
+### For Remote Users or Fresh Setup
+
+1. Copy `.env.example` to `.env` and update with your Cloudinary credentials.
+2. Run `docker-compose -f docker/docker-compose.yml up --build`
+
+The app will be available at http://localhost:3000
