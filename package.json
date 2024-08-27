@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:generate": "npx prisma generate"
+    "db:generate": "npx prisma generate",
+    "start-app": "cd ./app && npm run start"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
