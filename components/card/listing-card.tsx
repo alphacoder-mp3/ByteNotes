@@ -45,6 +45,7 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Collaborator, User } from '@prisma/client';
 import { DeleteNotes } from '@/components/delete-notes';
+import { VersionHistory } from '@/components/version-history';
 
 type ImageProps = {
   url: string;
@@ -202,6 +203,9 @@ export const ListingCard = ({
                   }}
                 >
                   Make a copy
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <VersionHistory id={item.id} />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -376,6 +380,9 @@ export const ListingCard = ({
                   }}
                 >
                   Make a copy
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <VersionHistory id={item.id} />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
