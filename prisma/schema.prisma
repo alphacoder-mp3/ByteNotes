@@ -24,6 +24,7 @@ model User {
   updatedAt     DateTime       @default(now()) @updatedAt
   todos         Todo[]
   collaborators Collaborator[]
+  TodoHistory   TodoHistory[]
 }
 
 model Todo {
@@ -39,26 +40,47 @@ model Todo {
   images         Image[] // Relation to the Image model
   collaborators  Collaborator[]
   lastModifiedBy String         @default("")
+  TodoHistory    TodoHistory[]
+}
+
+model TodoHistory {
+  id             String         @id @default(uuid())
+  todoId         String
+  title          String?
+  description    String?
+  done           Boolean?
+  todoColor      String?
+  lastModifiedBy String
+  createdAt      DateTime       @default(now())
+  collaborators  Collaborator[]
+  userId         String?
+  user           User?          @relation(fields: [userId], references: [id])
+  Todo           Todo           @relation(fields: [todoId], references: [id])
+
+  @@index([todoId])
 }
 
 model Image {
-  id        String   @id @default(cuid())
-  url       String
-  todo      Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
-  todoId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id            String   @id @default(cuid())
+  url           String
+  todo          Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
+  todoId        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+  todoHistoryId String?
 }
 
 model Collaborator {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  todo      Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
-  todoId    String
-  isOwner   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id            String       @id @default(cuid())
+  user          User         @relation(fields: [userId], references: [id])
+  userId        String
+  todo          Todo         @relation(fields: [todoId], references: [id], onDelete: Cascade)
+  todoId        String
+  isOwner       Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
+  TodoHistory   TodoHistory? @relation(fields: [todoHistoryId], references: [id])
+  todoHistoryId String?
 
   @@unique([userId, todoId])
 }
