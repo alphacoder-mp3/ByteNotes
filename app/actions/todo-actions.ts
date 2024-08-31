@@ -142,6 +142,20 @@ export async function updateTodo(
       };
     }
 
+    if (todo) {
+      await prisma.todoHistory.create({
+        data: {
+          todoId: id,
+          title: todo.title,
+          description: todo.description,
+          done: todo.done,
+          todoColor: todo.todoColor,
+          lastModifiedBy: todo.lastModifiedBy ?? userId,
+          createdAt: todo.updatedAt,
+        },
+      });
+    } //This is to keep the track of todo history
+
     await prisma.todo.update({
       where: { id },
       data: {
@@ -275,4 +289,11 @@ export async function getTodo(
       totalPages: 0,
     };
   }
+}
+
+export async function getTodoHistory(todoId: string) {
+  return await prisma.todoHistory.findMany({
+    where: { todoId },
+    orderBy: { createdAt: 'desc' },
+  });
 }
