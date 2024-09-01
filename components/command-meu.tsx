@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { DialogProps } from '@radix-ui/react-dialog';
+import useDebounce from '@/hooks/useDebounce';
 import { LaptopIcon, MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 
@@ -16,9 +16,64 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command';
+import { searchNotes } from '@/app/actions/search-notes';
+import { ListingCard } from './card/listing-card';
+import { getDarkModeColor, getLightModeColor } from '@/common/common';
+import {
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { parseFormattedText } from '@/common/formatted-text';
+import Image from 'next/image';
+import { getCollaborators } from '@/app/actions/collaborate-actions';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-export function CommandMenu({ ...props }: DialogProps) {
+type User = {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  profilePic?: string | null;
+  password?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type Collaborator = {
+  id: string;
+  userId: string;
+  todoId: string;
+  isOwner: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  todoHistoryId: string | null;
+  user: User;
+};
+
+type Note = {
+  title: string;
+  description: string;
+  done: boolean;
+  id: string;
+  todoColor: string;
+  updatedAt: Date;
+  lastModifiedBy: string;
+  user: {
+    username: string;
+  };
+  images: {
+    id: string;
+    url: string;
+  }[];
+  collabs?: Collaborator[]; // Updated collabs type to match the shape
+};
+
+export function CommandMenu({ userId }: { userId: string }) {
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState('');
+  const [results, setResults] = React.useState<Note[]>([]);
   const { setTheme } = useTheme();
 
   React.useEffect(() => {
@@ -47,6 +102,33 @@ export function CommandMenu({ ...props }: DialogProps) {
     command();
   }, []);
 
+  // Handle search with debouncing
+  const handleSearch = useDebounce(async (query: string) => {
+    if (query.trim().length === 0) {
+      setResults([]);
+      return;
+    }
+
+    const res = await searchNotes(query, userId);
+    if (res.success) {
+      // Fetch collaborators for each note
+      const updatedResults: Note[] = await Promise.all(
+        res.data.map(async item => {
+          const { data: collabs, success } = await getCollaborators(item.id);
+          return { ...item, collabs: success ? collabs : [] };
+        })
+      );
+      setResults(updatedResults);
+    } else {
+      setResults([]);
+    }
+  }, 300);
+
+  const handleInputChange = (value: string) => {
+    setQuery(value);
+    handleSearch(value);
+  };
+
   return (
     <>
       <Button
@@ -55,7 +137,6 @@ export function CommandMenu({ ...props }: DialogProps) {
           'relative h-8 w-full justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64'
         )}
         onClick={() => setOpen(true)}
-        {...props}
       >
         <span className="hidden lg:inline-flex">Search Your Notes...</span>
         <span className="inline-flex lg:hidden">Search...</span>
@@ -63,11 +144,78 @@ export function CommandMenu({ ...props }: DialogProps) {
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+      <CommandDialog
+        open={open}
+        onOpenChange={() => {
+          setOpen(false);
+          setQuery('');
+          setResults([]);
+        }}
+      >
+        <CommandInput
+          placeholder="Search your notes..."
+          value={query}
+          onValueChange={handleInputChange}
+        />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-
+          {results?.length === 0 ? (
+            <CommandEmpty>No results found.</CommandEmpty>
+          ) : (
+            results.map((item: Note) => (
+              <div key={item.id} className="px-4 py-2">
+                <ListingCard
+                  item={item}
+                  userId={userId}
+                  className={`relative mb-4 border dark:border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column group ${getLightModeColor(
+                    item.todoColor
+                  )} ${getDarkModeColor(item.todoColor)}`}
+                  collabs={item.collabs as any}
+                >
+                  <CardHeader className="py-2 px-4">
+                    {item.images?.map(image => (
+                      <Image
+                        src={image.url}
+                        key={image.id}
+                        alt="Image"
+                        width={200}
+                        height={200}
+                        className="h-full w-full rounded"
+                        priority={true}
+                      />
+                    ))}
+                    <CardTitle className="font-bold text-lg">
+                      {item.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="py-2 px-4">
+                    {parseFormattedText(item.description)}
+                  </CardContent>
+                  <CardFooter className="mb-4">
+                    {item.collabs
+                      ?.filter(collab => collab.user.id !== userId)
+                      .map(collab => (
+                        <Avatar
+                          key={collab.user.id}
+                          className="flex items-center justify-center"
+                        >
+                          <AvatarImage
+                            src={collab.user.profilePic as string}
+                            alt="AS"
+                            className="cursor-pointer w-7 h-7 rounded-full"
+                            width={50}
+                            height={50}
+                          />
+                          <AvatarFallback className="cursor-pointer w-7 h-7 p-2 shadow rounded-full dark:border border-gray-600 text-xs">
+                            {collab.user?.firstName.charAt(0)}
+                            {collab.user?.lastName.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                      ))}
+                  </CardFooter>
+                </ListingCard>
+              </div>
+            ))
+          )}
           <CommandSeparator />
           <CommandGroup heading="Theme">
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>

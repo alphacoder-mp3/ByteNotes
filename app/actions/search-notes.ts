@@ -6,9 +6,9 @@ export async function searchNotes(
   userId: string
 ): Promise<{
   success: boolean;
-  error?: unknown;
-  message?: string;
-  data?: {
+  error: unknown;
+  message: string;
+  data: {
     title: string;
     description: string;
     done: boolean;
@@ -67,8 +67,18 @@ export async function searchNotes(
       },
     });
 
-    return { success: true, data: results };
+    return {
+      success: true,
+      data: results,
+      error: false,
+      message: 'Data fetched successfully.',
+    };
   } catch (error) {
-    return { success: false, message: 'Error fetching notes.', error };
+    return {
+      success: false,
+      data: [],
+      message: 'Error fetching notes.',
+      error,
+    };
   }
 }
