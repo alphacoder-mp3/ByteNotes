@@ -26,9 +26,23 @@ export async function searchNotes(
   try {
     const results = await prisma.todo.findMany({
       where: {
-        OR: [
-          { title: { contains: query, mode: 'insensitive' } },
-          { description: { contains: query, mode: 'insensitive' } },
+        AND: [
+          {
+            OR: [
+              { title: { contains: query, mode: 'insensitive' } },
+              { description: { contains: query, mode: 'insensitive' } },
+            ],
+          },
+          {
+            OR: [
+              { userId }, // Notes owned by the user
+              {
+                collaborators: {
+                  some: { userId }, // Notes where the user is a collaborator
+                },
+              },
+            ],
+          },
         ],
       },
       select: {
