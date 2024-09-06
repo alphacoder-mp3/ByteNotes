@@ -42,6 +42,9 @@ export async function signUp(
       },
     });
 
+    //set session
+    setSession(newUser);
+
     return {
       success: true,
       user: newUser,
