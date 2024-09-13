@@ -183,11 +183,11 @@ export function CommandMenu({ userId }: { userId: string }) {
                         priority={true}
                       />
                     ))}
-                    <CardTitle className="font-bold text-lg">
+                    <CardTitle className="font-bold text-lg break-words">
                       {item.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="py-2 px-4">
+                  <CardContent className="py-2 px-4 break-words">
                     {parseFormattedText(item.description)}
                   </CardContent>
                   <CardFooter className="mb-4">
