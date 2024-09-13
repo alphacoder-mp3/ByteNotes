@@ -36,7 +36,8 @@ export default function SignUp() {
     <form
       ref={formRef}
       action={handleSignUp}
-      className="min-h-screen flex items-center justify-center bg-[url('@/public/loader.svg?height=400&width=400')] bg-repeat p-4"
+      className="min-h-screen flex items-center justify-center p-4"
+      // bg-[url('@/public/loader.svg?height=400&width=400')] bg-repeat
     >
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1 flex flex-col items-center">
