@@ -28,11 +28,19 @@ const GetNotes = async ({
     <span> Error while fetching todos {message}</span>;
   }
 
+  // Get all collaborators for the todos
+  const todosWithCollaborators = await Promise.all(
+    todo.map(async item => {
+      const { data: collabs } = await getCollaborators(item.id);
+      return { ...item, collaborators: collabs };
+    })
+  );
+
   return (
     <section className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 p-4 mt-10">
-      {todo &&
-        todo.map(async item => {
-          const { data: collabs, success } = await getCollaborators(item.id);
+      {todosWithCollaborators &&
+        todosWithCollaborators.map(item => {
+          // const { data: collabs, success } = await getCollaborators(item.id);
 
           return (
             <ListingCard
@@ -42,7 +50,7 @@ const GetNotes = async ({
               className={`relative mb-4 border dark:border-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 break-inside-avoid-column group ${getLightModeColor(
                 item.todoColor
               )} ${getDarkModeColor(item.todoColor)}`}
-              collabs={collabs}
+              collabs={item.collaborators}
             >
               <CardHeader className="py-2 px-4">
                 {item.images?.map((item: any) => (
@@ -64,7 +72,7 @@ const GetNotes = async ({
                 {parseFormattedText(item.description)}
               </CardContent>
               <CardFooter className="mb-4">
-                {collabs
+                {item.collaborators
                   ?.filter(item => item.user.id !== userId)
                   .map(item => (
                     <Avatar
