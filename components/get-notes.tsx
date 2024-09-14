@@ -8,7 +8,7 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { ListingCard } from './card/listing-card';
+import { ListingCard } from '@/components/card/listing-card';
 import Image from 'next/image';
 import { getLightModeColor, getDarkModeColor } from '@/common/common';
 import { getCollaborators } from '@/app/actions/collaborate-actions';
